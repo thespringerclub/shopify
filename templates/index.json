@@ -2,216 +2,23 @@
   "sections": {
     "hero": {
       "type": "hero",
-      "blocks": {
-        "lockup": {
-          "type": "brand-lockup",
-          "settings": {
-            "variant": "stacked",
-            "color": "bone",
-            "scale": 1,
-            "align": "center",
-            "margin_bottom": 32
-          }
-        },
-        "tagline": {
-          "type": "body",
-          "settings": {
-            "text": "<p>Found wherever the birds are.</p>",
-            "style": "editorial-italic",
-            "font_size_em": 1.375,
-            "color": "var(--bone)",
-            "align": "center",
-            "margin_bottom": 28
-          }
-        },
-        "eyebrow": {
-          "type": "eyebrow",
-          "settings": {
-            "text": "Members in Good Standing — Est. 2026",
-            "color": "var(--bone)",
-            "align": "center",
-            "margin_bottom": 0
-          }
-        }
-      },
-      "block_order": ["lockup", "tagline", "eyebrow"],
       "settings": {
-        "image": "",
-        "ground": "none",
+        "ground": "sage",
         "show_placeholder": true,
-        "placeholder_caption": "HERO · Springer at a shingled porch, Nantucket morning, soft diffused light",
-        "placeholder_corner": "21:9 · Atmospheric",
-        "overlay_opacity": 35,
-        "height_vh": 95,
-        "max_height": 900,
-        "min_height": 640,
+        "placeholder_caption": "DEBUG · homepage hero",
+        "placeholder_corner": "21:9",
+        "overlay_opacity": 0,
+        "height_vh": 60,
+        "max_height": 720,
+        "min_height": 420,
         "padding_top": 120,
         "padding_bottom": 80,
         "content_position": "center",
         "content_align": "center",
-        "content_color": "bone",
+        "content_color": "ink",
         "content_max_width": 720
-      }
-    },
-    "intro": {
-      "type": "editorial-paragraph",
-      "blocks": {
-        "eyebrow": {
-          "type": "eyebrow",
-          "settings": { "text": "The current collection", "align": "center", "margin_bottom": 28 }
-        },
-        "body": {
-          "type": "body",
-          "settings": {
-            "text": "<p>Made for the porch, the field, and the long way home — drawn in the editorial register of mid-century book illustration, embroidered as the brand has always embroidered.</p>",
-            "style": "editorial-italic",
-            "font_size_em": 1.625,
-            "align": "center",
-            "max_width": 50,
-            "margin_bottom": 0
-          }
-        },
-        "rule": {
-          "type": "hairline",
-          "settings": { "color": "ink", "center": true, "width": 60, "margin_top": 40, "margin_bottom": 0 }
-        }
-      },
-      "block_order": ["eyebrow", "body", "rule"],
-      "settings": {
-        "ground": "bone",
-        "padding_top": 96,
-        "padding_bottom": 96
-      }
-    },
-    "featured": {
-      "type": "featured-products",
-      "blocks": {
-        "p1": {
-          "type": "product",
-          "settings": {
-            "eyebrow": "Apparel · Tees",
-            "tone": "tone-sage",
-            "placeholder_caption": "SPRINGER MUM · on-figure, kitchen with linen curtains",
-            "fallback_title": "The Springer Mum.",
-            "fallback_price": "$78"
-          }
-        },
-        "p2": {
-          "type": "product",
-          "settings": {
-            "eyebrow": "Apparel · Crewnecks",
-            "tone": "tone-deep",
-            "placeholder_caption": "BORN TO FLUSH · on-dog, covert at low light",
-            "fallback_title": "Born to Flush.",
-            "fallback_price": "$148"
-          }
-        },
-        "p3": {
-          "type": "product",
-          "settings": {
-            "eyebrow": "Accessories",
-            "tone": "tone-seaglass",
-            "placeholder_caption": "EMBROIDERED TOTE · the dog as model, leather handle detail",
-            "fallback_title": "The Embroidered Tote.",
-            "fallback_price": "$185"
-          }
-        }
-      },
-      "block_order": ["p1", "p2", "p3"],
-      "settings": {
-        "columns": "3",
-        "padding_top": 0,
-        "padding_bottom": 96
-      }
-    },
-    "editorial": {
-      "type": "editorial-spread",
-      "blocks": {
-        "eyebrow": {
-          "type": "eyebrow",
-          "settings": { "text": "From the journal", "align": "left", "margin_bottom": 20 }
-        },
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "text": "A short defense of the working dog at rest.",
-            "scale": "page",
-            "tag": "h2",
-            "align": "left",
-            "margin_bottom": 28
-          }
-        },
-        "body": {
-          "type": "body",
-          "settings": {
-            "text": "<p>The English Springer is a creature of two states: the field and the floor. The first is well-documented; the second, less so. A note on what the Springer does between the cover and the kitchen — and why it matters.</p>",
-            "style": "editorial-body",
-            "align": "left",
-            "margin_bottom": 32
-          }
-        },
-        "link": {
-          "type": "button",
-          "settings": {
-            "label": "Read in the journal",
-            "style": "link-italic",
-            "align": "left",
-            "margin_top": 0
-          }
-        }
-      },
-      "block_order": ["eyebrow", "heading", "body", "link"],
-      "settings": {
-        "ground": "sage",
-        "image_position": "left",
-        "image_ratio": "4-5",
-        "padding_top": 120,
-        "padding_bottom": 120,
-        "placeholder_tone": "tone-deep",
-        "placeholder_caption": "EDITORIAL · Penguin/Bawden-style illustration · the season cover"
-      }
-    },
-    "about": {
-      "type": "about-teaser",
-      "blocks": {
-        "eyebrow": {
-          "type": "eyebrow",
-          "settings": { "text": "About the club", "align": "center", "margin_bottom": 18 }
-        },
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "text": "An old breed, kept seriously.",
-            "scale": "page",
-            "tag": "h2",
-            "align": "center",
-            "margin_bottom": 20
-          }
-        },
-        "body": {
-          "type": "body",
-          "settings": {
-            "text": "<p>The Springer Club is a small house built around the English Springer Spaniel and the world that surrounds it — the country house, the sporting weekend, the hand-thatched fishing camp, the coastal cottage.</p>",
-            "style": "editorial-body",
-            "align": "center",
-            "max_width": 58,
-            "margin_bottom": 36
-          }
-        },
-        "link": {
-          "type": "button",
-          "settings": { "label": "The tradition", "style": "link", "align": "center" }
-        }
-      },
-      "block_order": ["eyebrow", "heading", "body", "link"],
-      "settings": {
-        "ground": "bone",
-        "show_mark_placeholder": true,
-        "mark_label": "ILLUSTRATION · BAWDEN-STYLE SPRINGER",
-        "padding_top": 96,
-        "padding_bottom": 96
       }
     }
   },
-  "order": ["hero", "intro", "featured", "editorial", "about"]
+  "order": ["hero"]
 }
