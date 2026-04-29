@@ -1,0 +1,75 @@
+{%- comment -%}
+  Theme block — Image.
+  If no image is set, renders a labeled placeholder with a ChatGPT-Images-2-style caption
+  so the merchant can read what should go there. See snippets/placeholder-image.liquid.
+{%- endcomment -%}
+
+{%- liquid
+  assign ratio = block.settings.ratio | default: '4-5'
+  assign tone = block.settings.tone | default: 'tone-deep'
+-%}
+
+<div
+  class="ph ratio-{{ ratio }} {{ tone }}"
+  style="
+    {% if block.settings.max_width != blank and block.settings.max_width > 0 %}max-width: {{ block.settings.max_width }}px; margin-left: auto; margin-right: auto;{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.image != blank -%}
+    {{ block.settings.image | image_url: width: 1600 | image_tag:
+        loading: 'lazy',
+        sizes: '(min-width: 1025px) 50vw, 100vw',
+        widths: '480, 720, 960, 1200, 1600',
+        alt: block.settings.alt
+    }}
+  {%- else -%}
+    <span class="ph-caption">{{ block.settings.placeholder_caption | default: 'IMAGE · description' }}</span>
+    {% if block.settings.placeholder_corner != blank %}
+      <span class="ph-corner">{{ block.settings.placeholder_corner }}</span>
+    {% endif %}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Image",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "alt", "label": "Alt text", "info": "Describe the scene briefly. Brief §16: never 'image of a dog'." },
+    {
+      "type": "select",
+      "id": "ratio",
+      "label": "Aspect ratio",
+      "default": "4-5",
+      "options": [
+        { "value": "4-5",  "label": "4:5 (product, lifestyle, journal)" },
+        { "value": "3-4",  "label": "3:4" },
+        { "value": "1-1",  "label": "1:1 (journal thumb, detail)" },
+        { "value": "16-9", "label": "16:9 (most heroes)" },
+        { "value": "21-9", "label": "21:9 (homepage / About hero)" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "tone",
+      "label": "Placeholder tone",
+      "default": "tone-deep",
+      "info": "Used only if no image is uploaded.",
+      "options": [
+        { "value": "tone-deep",     "label": "Deep" },
+        { "value": "tone-sage",     "label": "Sage" },
+        { "value": "tone-seaglass", "label": "Sea Glass" },
+        { "value": "tone-warm",     "label": "Warm (Clay-tinted)" },
+        { "value": "tone-bone",     "label": "Bone (pack-shot)" }
+      ]
+    },
+    { "type": "text", "id": "placeholder_caption", "label": "Placeholder caption (used when no image)", "default": "IMAGE · description here" },
+    { "type": "text", "id": "placeholder_corner",  "label": "Placeholder corner tag", "default": "" },
+    { "type": "range", "id": "max_width", "label": "Max width (px, 0 = full)", "min": 0, "max": 1600, "step": 40, "default": 0 }
+  ],
+  "presets": [
+    { "name": "Image" }
+  ]
+}
+{% endschema %}

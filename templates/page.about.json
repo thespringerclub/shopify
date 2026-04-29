@@ -1,0 +1,160 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "blocks": {
+        "eyebrow": {
+          "type": "eyebrow",
+          "settings": { "text": "About the club", "color": "var(--bone)", "align": "center", "margin_bottom": 16 }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "The Tradition.",
+            "scale": "hero",
+            "tag": "h1",
+            "color": "var(--bone)",
+            "align": "center",
+            "margin_bottom": 0
+          }
+        }
+      },
+      "block_order": ["eyebrow", "heading"],
+      "settings": {
+        "ground": "none",
+        "show_placeholder": true,
+        "placeholder_caption": "HERO · Springers at work — flush in covert, retrieve at a stream, low-light morning",
+        "placeholder_corner": "21:9",
+        "overlay_opacity": 50,
+        "height_vh": 80,
+        "max_height": 720,
+        "min_height": 520,
+        "padding_top": 64,
+        "padding_bottom": 64,
+        "content_position": "bottom",
+        "content_align": "center",
+        "content_color": "bone",
+        "content_max_width": 720
+      }
+    },
+    "intro": {
+      "type": "editorial-paragraph",
+      "blocks": {
+        "body": {
+          "type": "body",
+          "settings": {
+            "text": "<p>The Springer Club is a small house — a brand, a kennel, a quiet correspondence — built around the English Springer Spaniel and the world that surrounds it.</p>",
+            "style": "editorial-italic",
+            "font_size_em": 1.625,
+            "align": "center",
+            "max_width": 60,
+            "margin_bottom": 0
+          }
+        }
+      },
+      "block_order": ["body"],
+      "settings": {
+        "ground": "bone",
+        "padding_top": 96,
+        "padding_bottom": 32
+      }
+    },
+    "section_one": {
+      "type": "about-section",
+      "blocks": {
+        "eyebrow": { "type": "eyebrow", "settings": { "text": "I.", "align": "left", "margin_bottom": 18 } },
+        "heading": { "type": "heading", "settings": { "text": "The breed.", "scale": "h2-italic", "tag": "h2", "align": "left", "margin_bottom": 24 } },
+        "body": {
+          "type": "body",
+          "settings": {
+            "text": "<p>The English Springer Spaniel is the oldest of the British gundogs. It was developed not to point and not to retrieve, though it does both, but to flush — to put birds to wing. It is the most willing of the spaniels and the least precious. It works in covert, in water, in the long grass at the edge of the cut field. It rests, when permitted, against whichever piece of furniture is nearest its person.</p>",
+            "style": "editorial-body",
+            "align": "left",
+            "margin_bottom": 0
+          }
+        }
+      },
+      "block_order": ["eyebrow", "heading", "body"],
+      "settings": { "ground": "bone", "padding_top": 32, "padding_bottom": 80 }
+    },
+    "image_break_one": {
+      "type": "image-break",
+      "settings": {
+        "ratio": "16-9",
+        "full_bleed": false,
+        "placeholder_tone": "tone-sage",
+        "placeholder_caption": "SECTION BREAK · BAWDEN-STYLE ILLUSTRATION · A FIELD IN MAY",
+        "padding_top": 0,
+        "padding_bottom": 80
+      }
+    },
+    "section_two": {
+      "type": "about-section",
+      "blocks": {
+        "eyebrow": { "type": "eyebrow", "settings": { "text": "II.", "align": "left", "margin_bottom": 18 } },
+        "heading": { "type": "heading", "settings": { "text": "The world surrounding.", "scale": "h2-italic", "tag": "h2", "align": "left", "margin_bottom": 24 } },
+        "body_one": {
+          "type": "body",
+          "settings": {
+            "text": "<p>The country house, the sporting weekend, the hand-thatched fishing camp, the coastal cottage. Loro Piana over logo. Drake's over Tom Ford. A Land Cruiser in the drive and a Barbour on its third re-wax. The customer doesn't post much. The people who matter already know what she's up to.</p>",
+            "style": "editorial-body",
+            "align": "left",
+            "margin_bottom": 18
+          }
+        },
+        "body_two": {
+          "type": "body",
+          "settings": {
+            "text": "<p>The brand is built for that customer. It is positioned squarely in the quiet luxury lane and assumes, throughout, that the reader is literate.</p>",
+            "style": "editorial-body",
+            "align": "left",
+            "margin_bottom": 0
+          }
+        }
+      },
+      "block_order": ["eyebrow", "heading", "body_one", "body_two"],
+      "settings": { "ground": "bone", "padding_top": 0, "padding_bottom": 80 }
+    },
+    "image_break_two": {
+      "type": "image-break",
+      "settings": {
+        "ratio": "16-9",
+        "full_bleed": false,
+        "placeholder_tone": "tone-seaglass",
+        "placeholder_caption": "SECTION BREAK · A LAND CRUISER, A SHINGLED PORCH, HYDRANGEAS",
+        "padding_top": 0,
+        "padding_bottom": 80
+      }
+    },
+    "section_three": {
+      "type": "about-section",
+      "blocks": {
+        "eyebrow": { "type": "eyebrow", "settings": { "text": "III.", "align": "left", "margin_bottom": 18 } },
+        "heading": { "type": "heading", "settings": { "text": "The making.", "scale": "h2-italic", "tag": "h2", "align": "left", "margin_bottom": 24 } },
+        "body": {
+          "type": "body",
+          "settings": {
+            "text": "<p>Apparel is made in Portugal in heavyweight Pima and loopback cotton. Marks are rendered in Soft Ink — chain-stitch where the surface allows it, single-color screen print where it does not. Hang-tags carry a Clay foil-stamp of the logomark. Packaging is a single sheet of unbleached tissue, a paper sleeve, a string tie. Nothing is plastic.</p>",
+            "style": "editorial-body",
+            "align": "left",
+            "margin_bottom": 0
+          }
+        }
+      },
+      "block_order": ["eyebrow", "heading", "body"],
+      "settings": { "ground": "bone", "padding_top": 0, "padding_bottom": 96 }
+    },
+    "members_cta": {
+      "type": "members-cta",
+      "settings": {
+        "ground": "sage",
+        "eyebrow": "Members in Good Standing",
+        "heading": "The rolls are open.",
+        "body": "<p>Quiet correspondence, infrequent. Notice when a new collection is in good order, an entry is posted to the journal, or a member's gathering is on the calendar.</p>",
+        "padding_top": 120,
+        "padding_bottom": 120
+      }
+    }
+  },
+  "order": ["hero", "intro", "section_one", "image_break_one", "section_two", "image_break_two", "section_three", "members_cta"]
+}

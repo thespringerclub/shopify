@@ -1,0 +1,30 @@
+{
+  "current": {
+    "color_bone": "#F5EFE4",
+    "color_sage": "#9AAE9C",
+    "color_seaglass": "#B8C7D1",
+    "color_clay": "#C48B6F",
+    "color_ink": "#2C2A28",
+    "header_transparent_on_home": true,
+    "header_show_eyebrow": true,
+    "cart_microcopy": "Shipping is calculated at checkout. Returns in good order within thirty days.",
+    "cart_empty_message": "The bag is currently empty. Browse the collection.",
+    "footer_tagline": "Found wherever the birds are.",
+    "footer_eyebrow": "Members in Good Standing — Est. 2026",
+    "footer_email_heading": "Join the rolls.",
+    "footer_email_caption": "Quiet correspondence, infrequent.",
+    "search_placeholder": "Search the kennel.",
+    "search_empty": "No matches in the current rolls. Browse the collection."
+  },
+  "presets": {
+    "Default": {
+      "color_bone": "#F5EFE4",
+      "color_sage": "#9AAE9C",
+      "color_seaglass": "#B8C7D1",
+      "color_clay": "#C48B6F",
+      "color_ink": "#2C2A28",
+      "header_transparent_on_home": true,
+      "header_show_eyebrow": true
+    }
+  }
+}

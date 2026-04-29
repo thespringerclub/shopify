@@ -1,0 +1,134 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "The Springer Club",
+    "theme_version": "0.1.0",
+    "theme_author": "The Springer Club",
+    "theme_documentation_url": "https://thespringerclub.com",
+    "theme_support_email": "kennel@thespringerclub.com"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logomark",
+        "label": "Logomark (Audubon-style Springer-flushing-a-bird)",
+        "info": "Used in header, footer, hero lockups, member card. Soft Ink on Bone. SVG preferred."
+      },
+      {
+        "type": "image_picker",
+        "id": "logomark_clay",
+        "label": "Logomark — Clay foil variant",
+        "info": "Used on the member card only. Same artwork in Clay (#C48B6F)."
+      },
+      {
+        "type": "image_picker",
+        "id": "wordmark",
+        "label": "Wordmark — 'The Springer Club' (Pinyon Script)",
+        "info": "Optional. If empty, the wordmark is rendered as live Pinyon Script web text."
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Logomark only, square. Will be served at 16/32/64/128px."
+      }
+    ]
+  },
+  {
+    "name": "Palette (locked)",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "The palette is fixed by the brand brief. Do not change without consulting the brand team."
+      },
+      { "type": "color", "id": "color_bone", "label": "Bone (ground)", "default": "#F5EFE4" },
+      { "type": "color", "id": "color_sage", "label": "Sage (signature)", "default": "#9AAE9C" },
+      { "type": "color", "id": "color_seaglass", "label": "Sea Glass (cool secondary)", "default": "#B8C7D1" },
+      { "type": "color", "id": "color_clay", "label": "Clay (warm accent, hairlines only)", "default": "#C48B6F" },
+      { "type": "color", "id": "color_ink", "label": "Soft Ink (type)", "default": "#2C2A28" }
+    ]
+  },
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "header_transparent_on_home",
+        "label": "Transparent header on the homepage",
+        "default": true,
+        "info": "Header sits transparently over the homepage hero. Becomes opaque after the hero scrolls past."
+      },
+      {
+        "type": "checkbox",
+        "id": "header_show_eyebrow",
+        "label": "Show 'Members in Good Standing' eyebrow on hero",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Cart & checkout",
+    "settings": [
+      {
+        "type": "text",
+        "id": "cart_microcopy",
+        "label": "Cart microcopy",
+        "default": "Shipping is calculated at checkout. Returns in good order within thirty days."
+      },
+      {
+        "type": "text",
+        "id": "cart_empty_message",
+        "label": "Cart empty message",
+        "default": "The bag is currently empty. Browse the collection."
+      }
+    ]
+  },
+  {
+    "name": "Footer",
+    "settings": [
+      {
+        "type": "text",
+        "id": "footer_tagline",
+        "label": "Tagline",
+        "default": "Found wherever the birds are."
+      },
+      {
+        "type": "text",
+        "id": "footer_eyebrow",
+        "label": "Eyebrow line",
+        "default": "Members in Good Standing — Est. 2026"
+      },
+      {
+        "type": "text",
+        "id": "footer_email_heading",
+        "label": "Email capture heading",
+        "default": "Join the rolls."
+      },
+      {
+        "type": "text",
+        "id": "footer_email_caption",
+        "label": "Email capture caption",
+        "default": "Quiet correspondence, infrequent."
+      }
+    ]
+  },
+  {
+    "name": "Search overlay",
+    "settings": [
+      {
+        "type": "text",
+        "id": "search_placeholder",
+        "label": "Search placeholder",
+        "default": "Search the kennel."
+      },
+      {
+        "type": "text",
+        "id": "search_empty",
+        "label": "Search empty state",
+        "default": "No matches in the current rolls. Browse the collection."
+      }
+    ]
+  }
+]

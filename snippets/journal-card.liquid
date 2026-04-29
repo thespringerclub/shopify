@@ -1,0 +1,36 @@
+{%- comment -%}
+  Journal card. Brief §11.10.
+  4:5 illustration / photo, italic Cormorant title, Inter date and excerpt.
+
+  Inputs:
+    article: Article object (required)
+    tone:    placeholder tone fallback
+{%- endcomment -%}
+
+{%- liquid
+  assign tone = tone | default: article.metafields.springer.tone | default: 'tone-sage'
+-%}
+
+<article style="cursor: pointer;">
+  <a href="{{ article.url }}" style="display: block; color: inherit;">
+    <div class="ph ratio-4-5 {% if article.image == blank %}{{ tone }}{% endif %}">
+      {%- if article.image != blank -%}
+        {{ article.image | image_url: width: 1200 | image_tag:
+            loading: 'lazy',
+            sizes: '(min-width: 1025px) 50vw, 100vw',
+            widths: '480, 720, 960, 1200',
+            alt: article.image.alt | default: article.title
+        }}
+      {%- else -%}
+        <span class="ph-caption">JOURNAL · {{ article.title | upcase | truncate: 40 }}</span>
+      {%- endif -%}
+    </div>
+    <div style="margin-top: 20px;">
+      <p class="micro" style="color: var(--ink-60); margin-bottom: 8px;">{{ article.published_at | date: '%B %Y' | upcase }}</p>
+      <h3 class="h2-italic" style="font-size: 1.5rem; margin-bottom: 12px;">{{ article.title }}</h3>
+      {%- if article.excerpt != blank -%}
+        <p class="serif-italic" style="font-size: 1.0625rem; color: var(--ink-60);">{{ article.excerpt | strip_html }}</p>
+      {%- endif -%}
+    </div>
+  </a>
+</article>

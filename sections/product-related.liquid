@@ -1,0 +1,55 @@
+{%- comment -%}
+  Product related — "Pairs well with" row.
+  Brief §11.5.
+  Three related products, one row, no carousel.
+{%- endcomment -%}
+
+{%- liquid
+  assign limit = section.settings.limit | default: 3
+  assign rec = recommendations.products | default: empty
+  if rec.size == 0 and product.collections.size > 0
+    assign primary_collection = product.collections.first
+    assign rec = primary_collection.products | where: 'id', '!=', product.id
+  endif
+-%}
+
+<section style="padding: {{ section.settings.padding_top }}px 0; border-top: 1px solid var(--ink-12);">
+  <div class="container">
+    <p class="eyebrow text-muted" style="margin-bottom: 32px;">{{ section.settings.heading | default: 'Pairs well with' }}</p>
+    <div class="collection-grid" style="grid-template-columns: repeat({{ limit }}, 1fr); gap: 32px;">
+      {%- for p in rec limit: limit -%}
+        {%- unless p.id == product.id -%}
+          {%- render 'product-card', product: p -%}
+        {%- endunless -%}
+      {%- else -%}
+        {%- comment -%} Placeholders when no recommendations {%- endcomment -%}
+        {%- for i in (1..limit) -%}
+          <div class="product-tile">
+            <div class="ph ratio-4-5 tone-warm">
+              <span class="ph-caption">RELATED PRODUCT · placeholder</span>
+            </div>
+            <div style="padding: 0 4px;">
+              <p class="serif-italic" style="font-size: 1.125rem; margin: 0;">A related product.</p>
+              <p class="small text-muted" style="margin-top: 4px;">—</p>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product related",
+  "tag": "section",
+  "settings": [
+    { "type": "text",  "id": "heading", "label": "Heading", "default": "Pairs well with" },
+    { "type": "range", "id": "limit",   "label": "Number of products", "min": 2, "max": 4, "step": 1, "default": 3 },
+    { "type": "range", "id": "padding_top", "label": "Padding top (px)", "min": 0, "max": 200, "step": 8, "default": 96 }
+  ],
+  "presets": [
+    { "name": "Product related" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,286 @@
+{%- comment -%}
+  Product detail — gallery + buy module.
+  Brief §11.5.
+
+  Left: vertical scroll gallery (no carousel, no zoom modal). Hairline rule between images.
+  Right: title, subtitle, price, swatches, sizes, add-to-bag, microcopy, description, accordions.
+
+  Editorial fields read from product metafields (namespace: 'springer'):
+    - subtitle  (text)
+    - tone      (text — 'tone-sage' | 'tone-deep' | etc., for placeholder color)
+    - mark_label (text — used on the in-isolation mark image fallback)
+    - story_*   (consumed by sections/product-story.liquid)
+{%- endcomment -%}
+
+{%- liquid
+  assign product = product
+  assign current_variant = product.selected_or_first_available_variant
+  assign tone = product.metafields.springer.tone | default: 'tone-sage'
+  assign subtitle = product.metafields.springer.subtitle
+  assign mark_label = product.metafields.springer.mark_label | default: product.title | upcase
+  assign show_breadcrumb = section.settings.show_breadcrumb
+  assign show_subtitle = section.settings.show_subtitle
+  assign show_specs = section.settings.show_specs
+  assign show_shipping = section.settings.show_shipping
+  assign show_description = section.settings.show_description
+  assign extra_images = section.settings.extra_placeholder_images | default: 4
+-%}
+
+<div data-product-root>
+  {%- if show_breadcrumb -%}
+    <div class="container-wide" style="padding-top: 28px;">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="{{ routes.collections_url }}">Apparel</a>
+        <span class="sep"></span>
+        {%- if collection != blank -%}
+          <a href="{{ collection.url }}">{{ collection.title }}</a>
+          <span class="sep"></span>
+        {%- endif -%}
+        <span>{{ product.title }}</span>
+      </nav>
+    </div>
+  {%- endif -%}
+
+  <section style="padding: 32px 0 64px;">
+    <div class="container-wide pdp-grid">
+      {%- comment -%} Left — vertical scroll gallery {%- endcomment -%}
+      <div class="pdp-gallery">
+        {%- if product.media.size > 0 -%}
+          {%- for media in product.media -%}
+            <div class="ph ratio-4-5 tone-bone" style="background: #fff; border: 1px solid var(--ink-12);">
+              {%- case media.media_type -%}
+                {%- when 'image' -%}
+                  {{ media | image_url: width: 1600 | image_tag:
+                      loading: forloop.first ? 'eager' : 'lazy',
+                      sizes: '(min-width: 1025px) 60vw, 100vw',
+                      widths: '480, 720, 960, 1200, 1600, 2000',
+                      alt: media.alt | default: product.title
+                  }}
+                {%- when 'video' -%}
+                  {{ media | video_tag: controls: true, image_size: '1600x' }}
+                {%- when 'external_video' -%}
+                  {{ media | external_video_tag }}
+                {%- else -%}
+                  {{ media | media_tag: image_size: '1600x' }}
+              {%- endcase -%}
+            </div>
+            {%- unless forloop.last -%}<div class="hairline-soft"></div>{%- endunless -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- comment -%} Placeholder gallery — pack-shot, on-figure, on-figure detail, detail crop, on-dog, mark in isolation {%- endcomment -%}
+          <div class="ph ratio-4-5 tone-bone" style="background: #fff; border: 1px solid var(--ink-12);">
+            <span class="ph-caption">PACK SHOT · {{ product.title | upcase }} · Bone ground, soft even light</span>
+            <span class="ph-corner">4:5 · Primary</span>
+          </div>
+          <div class="hairline-soft"></div>
+          <div class="ph ratio-4-5 {{ tone }}">
+            <span class="ph-caption">ON-FIGURE · believable setting, soft diffused light</span>
+            <span class="ph-corner">4:5</span>
+          </div>
+          <div class="hairline-soft"></div>
+          <div class="ph ratio-4-5 {{ tone }}">
+            <span class="ph-caption">ON-FIGURE DETAIL · fit & drape</span>
+            <span class="ph-corner">4:5</span>
+          </div>
+          <div class="hairline-soft"></div>
+          <div class="ph ratio-1-1 tone-deep">
+            <span class="ph-caption">DETAIL CROP · embroidery / print, single-needle hem</span>
+            <span class="ph-corner">1:1</span>
+          </div>
+          <div class="hairline-soft"></div>
+          <div class="ph ratio-4-5 tone-warm">
+            <span class="ph-caption">ON-DOG · the Springer beside the garment, the dog as model</span>
+            <span class="ph-corner">4:5</span>
+          </div>
+          <div class="hairline-soft"></div>
+          <div class="ph ratio-4-5 tone-bone" style="background: #fff; border: 1px solid var(--ink-12); display: flex; align-items: center; justify-content: center;">
+            {%- render 'mark-placeholder', label: 'MARK IN ISOLATION · ' | append: mark_label, width: 220, height: 220 -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Right — buy module {%- endcomment -%}
+      <div class="pdp-buy">
+        <h1 class="h2-italic" style="font-size: 2rem; margin-bottom: 8px;">{{ product.title }}</h1>
+
+        {%- if show_subtitle and subtitle != blank -%}
+          <p class="serif-italic" style="font-size: 1.25rem; color: var(--ink-60); margin-bottom: 20px; line-height: 1.4;">
+            {{ subtitle }}
+          </p>
+        {%- endif -%}
+
+        <p class="body" style="font-size: 1.0625rem; margin-bottom: 36px;" data-price>
+          {{ current_variant.price | money_without_trailing_zeros }}
+        </p>
+
+        {%- form 'product', product, novalidate: 'novalidate' -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+
+          {%- for option in product.options_with_values -%}
+            {%- liquid
+              assign opt_index_zero = forloop.index0
+              assign opt_index_one  = forloop.index
+              assign is_color = false
+              if option.name contains 'Color' or option.name contains 'Colour'
+                assign is_color = true
+              endif
+              assign is_size = false
+              if option.name contains 'Size'
+                assign is_size = true
+              endif
+            -%}
+            <div style="margin-bottom: {% if is_color %}24px{% else %}28px{% endif %};">
+              <div class="flex-between" style="align-items: baseline; margin-bottom: 12px;">
+                <p class="eyebrow text-muted">
+                  {{ option.name }}
+                  {%- if is_color -%}
+                    · <span class="serif-italic" data-selected-color style="text-transform: none; letter-spacing: 0; font-size: 0.875rem; color: var(--ink);">{{ option.selected_value }}.</span>
+                  {%- endif -%}
+                </p>
+                {%- if is_size -%}
+                  <a href="#" class="small text-muted" style="border-bottom: 1px solid var(--ink-30);">{{ 'products.product.find_a_fitting' | t }}</a>
+                {%- endif -%}
+              </div>
+
+              {%- if is_color -%}
+                <div class="swatches">
+                  {%- for value in option.values -%}
+                    <button
+                      type="button"
+                      class="swatch {% if value == option.selected_value %}selected{% endif %}"
+                      data-option-index="{{ opt_index_zero }}"
+                      data-value="{{ value | escape }}"
+                      style="background: {{ value | downcase | replace: ' ', '-' | prepend: '#' | default: 'var(--ink-12)' }};"
+                      aria-label="{{ value }}"
+                    ></button>
+                  {%- endfor -%}
+                </div>
+              {%- elsif is_size -%}
+                <div class="sizes">
+                  {%- for value in option.values -%}
+                    {%- liquid
+                      assign matching = product.variants | where: option.name, value
+                      assign any_available = false
+                      for v in matching
+                        if v.available
+                          assign any_available = true
+                          break
+                        endif
+                      endfor
+                    -%}
+                    <button
+                      type="button"
+                      class="size-btn {% if value == option.selected_value %}selected{% endif %} {% unless any_available %}oos{% endunless %}"
+                      data-option-index="{{ opt_index_zero }}"
+                      data-value="{{ value | escape }}"
+                      {% unless any_available %}disabled{% endunless %}
+                    >{{ value }}</button>
+                  {%- endfor -%}
+                </div>
+              {%- else -%}
+                <div class="sizes">
+                  {%- for value in option.values -%}
+                    <button
+                      type="button"
+                      class="size-btn {% if value == option.selected_value %}selected{% endif %}"
+                      data-option-index="{{ opt_index_zero }}"
+                      data-value="{{ value | escape }}"
+                    >{{ value }}</button>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+
+          <button
+            type="submit"
+            class="btn-primary add-to-bag"
+            data-add-to-bag
+            data-label-available="{{ 'products.product.add_to_bag' | t }}"
+            data-label-oos="{{ 'products.product.sold_out' | t }}"
+            style="width: 100%; padding: 18px 22px;"
+            {% unless current_variant.available %}disabled{% endunless %}
+          >
+            {%- if current_variant.available -%}
+              {{ 'products.product.add_to_bag' | t }}
+            {%- else -%}
+              {{ 'products.product.sold_out' | t }}
+            {%- endif -%}
+          </button>
+
+          <p class="serif-italic" style="font-size: 0.9375rem; color: var(--ink-60); margin-top: 14px; text-align: center;" data-oos-note {% if current_variant.available %}hidden{% endif %}>
+            {{ 'products.product.notify' | t }}
+          </p>
+          <p class="serif-italic" style="font-size: 0.9375rem; color: var(--ink-60); margin-top: 14px; text-align: center;">
+            {{ section.settings.fulfillment_microcopy | default: 'Currently in good order. Ships within five working days.' }}
+          </p>
+        {%- endform -%}
+
+        {%- if show_description and product.description != blank -%}
+          <div style="margin-top: 40px;">
+            <div class="serif-italic" style="font-size: 1.0625rem; line-height: 1.6;">
+              {{ product.description }}
+            </div>
+          </div>
+        {%- endif -%}
+
+        <div style="margin-top: 36px;">
+          {%- if show_specs and product.metafields.springer.specs != blank -%}
+            <div class="acc">
+              <button type="button" class="acc-head" aria-expanded="false">
+                <span>{{ 'products.product.specifications' | t }}</span>
+                <span class="acc-plus">{%- render 'icon', icon: 'plus', size: 14 -%}</span>
+                <span class="acc-minus" style="display: none;">{%- render 'icon', icon: 'minus', size: 14 -%}</span>
+              </button>
+              <div class="acc-body">
+                {{ product.metafields.springer.specs | metafield_tag }}
+              </div>
+            </div>
+          {%- endif -%}
+
+          {%- if show_shipping -%}
+            <div class="acc">
+              <button type="button" class="acc-head" aria-expanded="false">
+                <span>{{ 'products.product.shipping_returns' | t }}</span>
+                <span class="acc-plus">{%- render 'icon', icon: 'plus', size: 14 -%}</span>
+                <span class="acc-minus" style="display: none;">{%- render 'icon', icon: 'minus', size: 14 -%}</span>
+              </button>
+              <div class="acc-body">
+                {{ section.settings.shipping_copy | default: 'Currently in good order. Domestic orders ship within five working days, by ground or expedited at checkout. Returns in good order within thirty days, full credit, no fuss.' }}
+              </div>
+            </div>
+          {%- endif -%}
+          <div style="border-bottom: 1px solid var(--ink-12);"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%}
+    JSON payload consumed by theme.js variant selector.
+    Keeps client-side logic in vanilla JS without extra payload weight.
+  {%- endcomment -%}
+  <script type="application/json" data-product-json>
+    {{ product | json }}
+  </script>
+</div>
+
+{% schema %}
+{
+  "name": "Product main",
+  "tag": "section",
+  "settings": [
+    { "type": "checkbox", "id": "show_breadcrumb",  "label": "Show breadcrumb",            "default": true },
+    { "type": "checkbox", "id": "show_subtitle",    "label": "Show editorial subtitle",     "default": true, "info": "From product metafield 'springer.subtitle'." },
+    { "type": "checkbox", "id": "show_description", "label": "Show description",            "default": true },
+    { "type": "checkbox", "id": "show_specs",       "label": "Show specs accordion",        "default": true, "info": "From product metafield 'springer.specs' (rich text)." },
+    { "type": "checkbox", "id": "show_shipping",    "label": "Show shipping accordion",     "default": true },
+    { "type": "text",     "id": "fulfillment_microcopy", "label": "Fulfillment microcopy", "default": "Currently in good order. Ships within five working days." },
+    { "type": "richtext", "id": "shipping_copy", "label": "Shipping & returns copy", "default": "<p>Currently in good order. Domestic orders ship within five working days, by ground or expedited at checkout. Returns in good order within thirty days, full credit, no fuss.</p>" },
+    { "type": "range",    "id": "extra_placeholder_images", "label": "Number of placeholder images (no real product media)", "min": 0, "max": 8, "step": 1, "default": 6 }
+  ],
+  "presets": [
+    { "name": "Product main" }
+  ]
+}
+{% endschema %}

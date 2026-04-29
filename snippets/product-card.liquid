@@ -1,0 +1,50 @@
+{%- comment -%}
+  Product card.
+  Used on the homepage featured grid, the collection grid, the journal "Pairs well with"
+  row, and search results.
+
+  Brief §12: no card chrome. Image, name, price stacked. No quick-add (brief §17).
+
+  Inputs:
+    product:    Product object               (required)
+    eyebrow:    optional eyebrow text (e.g. "Apparel · Tees")
+    show_eyebrow: bool                       (default: false)
+    sizes:      sizes attr for img           (default: '(min-width: 1025px) 33vw, 100vw')
+    placeholder_caption: fallback caption when no image
+    tone:       fallback tone when no image  (default: 'tone-deep')
+{%- endcomment -%}
+
+{%- liquid
+  assign tone = tone | default: product.metafields.springer.tone | default: 'tone-deep'
+  assign sizes = sizes | default: '(min-width: 1025px) 33vw, 100vw'
+  assign caption = placeholder_caption | default: product.title | upcase
+  assign show_eyebrow = show_eyebrow | default: false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+-%}
+
+<a class="product-tile" href="{{ product.url }}">
+  <div class="ph ratio-4-5 {% if product.featured_media != blank %}{% else %}{{ tone }}{% endif %}">
+    {%- if product.featured_media != blank -%}
+      {{ product.featured_media | image_url: width: 1200 | image_tag:
+          loading: 'lazy',
+          sizes: sizes,
+          widths: '480, 720, 960, 1200, 1600',
+          alt: product.featured_media.alt | default: product.title
+      }}
+    {%- else -%}
+      <span class="ph-caption">{{ caption }}</span>
+    {%- endif -%}
+    {%- if on_sale -%}
+      <span class="clay-flag">Limited</span>
+    {%- endif -%}
+  </div>
+  <div style="padding: 0 4px;">
+    {% if show_eyebrow and eyebrow != blank %}
+      <p class="eyebrow text-muted" style="margin-bottom: 6px;">{{ eyebrow }}</p>
+    {% endif %}
+    <p class="name" style="margin: 0;">{{ product.title }}</p>
+    <p class="price" style="margin-top: 4px;">{{ product.price | money_without_trailing_zeros }}</p>
+  </div>
+</a>

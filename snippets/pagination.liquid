@@ -1,0 +1,23 @@
+{%- comment -%}
+  Pagination — restrained, hairline progress + numbered fallback.
+  Brief §11.4: pagination is invisible / "load slowly" — for v1.0 we use a
+  prev/next pair with a hairline progress bar.
+{%- endcomment -%}
+
+{%- if paginate.pages > 1 -%}
+  <nav class="pagination" style="display: flex; justify-content: center; align-items: center; gap: 32px; padding: 64px 0; font-family: var(--sans); font-size: 0.875rem;">
+    {%- if paginate.previous -%}
+      <a href="{{ paginate.previous.url }}" class="link-italic">← {{ paginate.previous.title | default: 'Previous' }}</a>
+    {%- else -%}
+      <span style="color: var(--ink-30);">← Previous</span>
+    {%- endif -%}
+
+    <span class="micro" style="color: var(--ink-60);">{{ paginate.current_page }} / {{ paginate.pages }}</span>
+
+    {%- if paginate.next -%}
+      <a href="{{ paginate.next.url }}" class="link-italic">{{ paginate.next.title | default: 'Next' }} →</a>
+    {%- else -%}
+      <span style="color: var(--ink-30);">Next →</span>
+    {%- endif -%}
+  </nav>
+{%- endif -%}

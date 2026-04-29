@@ -1,0 +1,56 @@
+{%- comment -%}
+  Theme block — Script line.
+  Pinyon Script. Decorative-only — restricted to wordmark + this single decorative moment per page.
+  Brief §6: "Never use Pinyon for body, captions, headers, or buttons."
+{%- endcomment -%}
+
+<div
+  style="
+    {% if block.settings.align %}text-align: {{ block.settings.align }};{% endif %}
+    {% if block.settings.margin_top != blank %}margin-top: {{ block.settings.margin_top }}px;{% endif %}
+    {% if block.settings.margin_bottom != blank %}margin-bottom: {{ block.settings.margin_bottom }}px;{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  <span class="script script-line" style="
+    color: {{ block.settings.color }};
+    font-size: {{ block.settings.size_rem }}rem;
+  ">{{ block.settings.text }}</span>
+</div>
+
+{% schema %}
+{
+  "name": "Script line (decorative)",
+  "settings": [
+    { "type": "paragraph", "content": "Pinyon Script. Restricted to one decorative moment per page (brief §6). Never use for headers, captions, or body." },
+    { "type": "text", "id": "text", "label": "Text", "default": "The kennel" },
+    { "type": "range", "id": "size_rem", "label": "Size (rem)", "min": 1.5, "max": 6, "step": 0.25, "default": 2.5 },
+    {
+      "type": "select",
+      "id": "color",
+      "label": "Color",
+      "default": "var(--ink)",
+      "options": [
+        { "value": "var(--ink)",  "label": "Ink" },
+        { "value": "var(--bone)", "label": "Bone (on dark)" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    { "type": "range", "id": "margin_top",    "label": "Margin top (px)",    "min": 0, "max": 120, "step": 4, "default": 16 },
+    { "type": "range", "id": "margin_bottom", "label": "Margin bottom (px)", "min": 0, "max": 120, "step": 4, "default": 16 }
+  ],
+  "presets": [
+    { "name": "Script line" }
+  ]
+}
+{% endschema %}

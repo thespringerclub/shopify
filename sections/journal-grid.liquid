@@ -1,0 +1,54 @@
+{%- comment -%}
+  Journal grid. Brief §11.10.
+  Two-column desktop, single column mobile. No tags, no filters, no search at v1.0.
+{%- endcomment -%}
+
+{%- liquid
+  assign columns = section.settings.columns | default: 2
+  assign per_page = section.settings.per_page | default: 8
+-%}
+
+<section style="padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;">
+  <div class="container">
+    {%- paginate blog.articles by per_page -%}
+      {%- if blog.articles.size > 0 -%}
+        <div class="journal-grid" style="grid-template-columns: repeat({{ columns }}, 1fr);">
+          {%- for article in blog.articles -%}
+            {%- render 'journal-card', article: article -%}
+          {%- endfor -%}
+        </div>
+        {%- render 'pagination', paginate: paginate -%}
+      {%- else -%}
+        <div style="padding: 80px 0; text-align: center;">
+          <p class="serif-italic" style="font-size: 1.5rem;">{{ section.settings.empty_message | default: 'The journal is currently quiet.' }}</p>
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Journal grid",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Desktop columns",
+      "default": "2",
+      "options": [
+        { "value": "2", "label": "Two" },
+        { "value": "3", "label": "Three" }
+      ]
+    },
+    { "type": "range", "id": "per_page",        "label": "Entries per page",   "min": 4, "max": 24, "step": 2, "default": 8 },
+    { "type": "text",  "id": "empty_message", "label": "Empty message",        "default": "The journal is currently quiet." },
+    { "type": "range", "id": "padding_top",    "label": "Padding top (px)",    "min": 0, "max": 200, "step": 8, "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (px)", "min": 0, "max": 200, "step": 8, "default": 96 }
+  ],
+  "presets": [
+    { "name": "Journal grid" }
+  ]
+}
+{% endschema %}

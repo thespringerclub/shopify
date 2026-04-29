@@ -1,0 +1,71 @@
+{%- comment -%}
+  Members CTA — "Members in Good Standing. The rolls are open."
+  Brief §11.9 (closing of About) / §7 (microcopy register).
+  Sage ground, centered email capture.
+{%- endcomment -%}
+
+{%- liquid
+  case section.settings.ground
+    when 'sage'
+      assign ground_var = 'var(--sage)'
+    when 'seaglass'
+      assign ground_var = 'var(--seaglass)'
+    else
+      assign ground_var = 'var(--bone)'
+  endcase
+-%}
+
+<section style="background: {{ ground_var }}; padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px; text-align: center;">
+  <div class="container-narrow">
+    <p class="eyebrow" style="margin-bottom: 28px;">{{ section.settings.eyebrow | default: 'Members in Good Standing' }}</p>
+    <h2 class="h1-page serif-italic" style="margin-bottom: 28px;">{{ section.settings.heading | default: 'The rolls are open.' }}</h2>
+    <div class="editorial-body" style="margin-bottom: 36px; max-width: 52ch; margin-left: auto; margin-right: auto;">
+      {{ section.settings.body | default: '<p>Quiet correspondence, infrequent. Notice when a new collection is in good order, an entry is posted to the journal, or a member\'s gathering is on the calendar.</p>' }}
+    </div>
+    {%- form 'customer', class: 'members-cta-form' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter, members">
+      <div style="display: flex; gap: 8px; max-width: 480px; margin: 0 auto; flex-wrap: wrap;">
+        <input
+          class="input"
+          type="email"
+          name="contact[email]"
+          placeholder="{{ 'general.newsletter.placeholder' | t }}"
+          required
+          style="flex: 1; min-width: 0; border-color: var(--ink); background: var(--bone);"
+        >
+        <button class="btn-primary" type="submit">{{ 'general.newsletter.submit' | t }}</button>
+      </div>
+      {%- if form.posted_successfully? -%}
+        <p class="serif-italic" style="margin-top: 16px;">{{ 'general.newsletter.success' | t }}</p>
+      {%- endif -%}
+    {%- endform -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Members CTA",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "ground",
+      "label": "Ground",
+      "default": "sage",
+      "options": [
+        { "value": "sage",     "label": "Sage" },
+        { "value": "seaglass", "label": "Sea Glass" },
+        { "value": "bone",     "label": "Bone" }
+      ]
+    },
+    { "type": "text",     "id": "eyebrow", "label": "Eyebrow", "default": "Members in Good Standing" },
+    { "type": "text",     "id": "heading", "label": "Heading", "default": "The rolls are open." },
+    { "type": "richtext", "id": "body",    "label": "Body",    "default": "<p>Quiet correspondence, infrequent. Notice when a new collection is in good order, an entry is posted to the journal, or a member's gathering is on the calendar.</p>" },
+    { "type": "range", "id": "padding_top",    "label": "Padding top (px)",    "min": 0, "max": 240, "step": 8, "default": 120 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (px)", "min": 0, "max": 240, "step": 8, "default": 120 }
+  ],
+  "presets": [
+    { "name": "Members CTA" }
+  ]
+}
+{% endschema %}

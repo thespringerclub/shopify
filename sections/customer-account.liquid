@@ -1,0 +1,113 @@
+{%- comment -%}
+  Customer account dashboard. Brief §11.8.
+  Cormorant section headers, Inter rows, member card at the top.
+{%- endcomment -%}
+
+{%- liquid
+  assign first_name = customer.first_name | default: 'Member'
+  assign part_of_day = 'morning'
+  assign hour = 'now' | date: '%-H' | times: 1
+  if hour > 11 and hour < 18
+    assign part_of_day = 'afternoon'
+  elsif hour >= 18
+    assign part_of_day = 'evening'
+  endif
+-%}
+
+<section style="padding: 80px 0;">
+  <div class="container">
+    <p class="eyebrow text-muted" style="margin-bottom: 12px;">{{ section.settings.eyebrow | default: 'Account' }}</p>
+    <h1 class="h1-page serif-italic" style="margin-bottom: 56px;">
+      Good {{ part_of_day }}, {{ first_name }}.
+    </h1>
+
+    {%- if section.settings.show_member_card -%}
+      <div style="display: flex; justify-content: center; margin-bottom: 80px;">
+        {%- render 'member-card', customer: customer -%}
+      </div>
+    {%- endif -%}
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px;" class="account-grid">
+      {%- comment -%} Recent orders {%- endcomment -%}
+      <div>
+        <h2 class="h2-italic" style="font-size: 1.5rem; margin-bottom: 28px;">{{ 'customer.recent_orders' | t }}</h2>
+        {%- if customer.orders.size > 0 -%}
+          <div>
+            {%- for order in customer.orders limit: 6 -%}
+              <div style="padding: 20px 0; border-top: 1px solid var(--ink-12);">
+                <div class="flex-between" style="align-items: baseline;">
+                  <span class="micro text-muted">{{ order.name }} · {{ order.created_at | date: '%-d %B %Y' | upcase }}</span>
+                  <span class="small">{{ order.total_price | money_without_trailing_zeros }}</span>
+                </div>
+                <p class="serif-italic" style="font-size: 1.0625rem; margin: 6px 0 4px;">
+                  {%- for line in order.line_items limit: 1 -%}
+                    {{ line.product.title }}
+                    {%- if line.variant.title != 'Default Title' %} · {{ line.variant.title | replace: ' / ', ' · ' }}{% endif -%}
+                  {%- endfor -%}
+                  {%- if order.line_items.size > 1 %} +{{ order.line_items.size | minus: 1 }} more{% endif -%}
+                </p>
+                <p class="micro" style="color: {% if order.financial_status == 'paid' and order.fulfillment_status != 'fulfilled' %}var(--clay){% else %}var(--ink-60){% endif %};">
+                  {%- if order.fulfillment_status == 'fulfilled' -%}
+                    DELIVERED
+                  {%- elsif order.financial_status == 'paid' -%}
+                    IN GOOD ORDER
+                  {%- else -%}
+                    {{ order.financial_status_label | upcase }}
+                  {%- endif -%}
+                </p>
+                <a href="{{ order.customer_url }}" class="link" style="margin-top: 8px;">View order</a>
+              </div>
+            {%- endfor -%}
+            <div style="border-bottom: 1px solid var(--ink-12);"></div>
+          </div>
+        {%- else -%}
+          <p class="serif-italic" style="font-size: 1.0625rem; color: var(--ink-60);">{{ 'customer.no_orders' | t }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Saved addresses + member status {%- endcomment -%}
+      <div>
+        <h2 class="h2-italic" style="font-size: 1.5rem; margin-bottom: 28px;">{{ 'customer.saved_addresses' | t }}</h2>
+        {%- if customer.default_address != blank -%}
+          <div style="padding: 20px 0; border-top: 1px solid var(--ink-12); border-bottom: 1px solid var(--ink-12);">
+            <p class="micro text-muted" style="margin-bottom: 8px;">{{ 'customer.default_address' | t | upcase }}</p>
+            <div class="body" style="font-size: 1rem; line-height: 1.6;">
+              {{ customer.default_address | format_address }}
+            </div>
+            <a href="{{ routes.account_addresses_url }}" class="link" style="margin-top: 14px; display: inline-block;">{{ 'customer.edit' | t }}</a>
+          </div>
+        {%- else -%}
+          <p class="serif-italic" style="font-size: 1.0625rem; color: var(--ink-60);">No address on the rolls.</p>
+          <a href="{{ routes.account_addresses_url }}" class="link" style="margin-top: 14px; display: inline-block;">{{ 'customer.add_address' | t }}</a>
+        {%- endif -%}
+
+        <h2 class="h2-italic" style="font-size: 1.5rem; margin-top: 56px; margin-bottom: 16px;">
+          Members in good standing — since {{ customer.created_at | date: '%Y' }}.
+        </h2>
+        <p class="serif-italic" style="font-size: 1.0625rem; color: var(--ink-60); line-height: 1.6;">
+          {{ 'customer.members_paragraph' | t }}
+        </p>
+        <p style="margin-top: 20px;">
+          <a href="{{ routes.account_logout_url }}" class="link">{{ 'customer.sign_out' | t }}</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 900px) {
+    .account-grid { grid-template-columns: 1fr !important; gap: 56px !important; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Customer account",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Account" },
+    { "type": "checkbox", "id": "show_member_card", "label": "Show member card", "default": true }
+  ]
+}
+{% endschema %}

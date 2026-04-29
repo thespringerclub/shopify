@@ -1,0 +1,64 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "blocks": {
+        "eyebrow": {
+          "type": "eyebrow",
+          "settings": { "text": "Apparel · Spring 2026", "color": "var(--ink)", "align": "center", "margin_bottom": 20 }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "Spring Field Days.",
+            "scale": "hero",
+            "tag": "h1",
+            "color": "var(--ink)",
+            "align": "center",
+            "margin_bottom": 32
+          }
+        },
+        "intro": {
+          "type": "body",
+          "settings": {
+            "text": "<p>The first run for the new season. Quiet shapes for the porch, the kitchen, and the long way home.</p>",
+            "style": "editorial-italic",
+            "font_size_em": 1.375,
+            "align": "center",
+            "max_width": 52,
+            "margin_bottom": 0
+          }
+        }
+      },
+      "block_order": ["eyebrow", "heading", "intro"],
+      "settings": {
+        "ground": "sage",
+        "show_placeholder": false,
+        "overlay_opacity": 0,
+        "height_vh": 60,
+        "max_height": 720,
+        "min_height": 420,
+        "padding_top": 120,
+        "padding_bottom": 100,
+        "content_position": "center",
+        "content_align": "center",
+        "content_color": "ink",
+        "content_max_width": 720
+      }
+    },
+    "grid": {
+      "type": "collection-grid",
+      "settings": {
+        "columns": "3",
+        "products_per_page": 9,
+        "show_sort": true,
+        "show_end_moment": true,
+        "end_message": "The current rolls. Further moments live in the journal.",
+        "end_link_label": "The journal",
+        "padding_top": 0,
+        "padding_bottom": 96
+      }
+    }
+  },
+  "order": ["hero", "grid"]
+}

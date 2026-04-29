@@ -1,0 +1,52 @@
+{%- comment -%}
+  Article body — renders article.content (rich text from Shopify admin).
+  Brief §11.10: max-width 60ch, line-height 1.7. Pull quotes are styled
+  in the editor by wrapping them in <blockquote>...</blockquote>; this
+  section provides the styles.
+{%- endcomment -%}
+
+<section style="padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;">
+  <div class="container-narrow article-body" style="max-width: 720px;">
+    {{ article.content }}
+  </div>
+</section>
+
+<style>
+  .article-body { font-family: var(--sans); font-size: 1.0625rem; line-height: 1.7; color: var(--ink); }
+  .article-body p { margin: 0 0 18px; }
+  .article-body h2 { font-family: var(--serif); font-style: italic; font-size: 1.875rem; margin: 56px 0 18px; }
+  .article-body h3 { font-family: var(--serif); font-style: italic; font-size: 1.375rem; margin: 40px 0 14px; }
+  .article-body img { width: 100%; height: auto; margin: 32px 0; }
+  .article-body a { color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 1px; }
+  .article-body a:hover { color: var(--clay); border-bottom-color: var(--clay); }
+  .article-body blockquote {
+    margin: 48px 0;
+    padding: 32px 0;
+    border-top: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.875rem;
+    line-height: 1.3;
+  }
+  .article-body blockquote p { margin: 0; }
+  .article-body em { font-style: italic; }
+  .article-body ul, .article-body ol { margin: 0 0 18px 1.25em; padding: 0; list-style: revert; }
+  .article-body li { margin: 0 0 6px; }
+  .article-body hr { border: 0; border-top: 1px solid var(--ink-30); margin: 32px 0; }
+</style>
+
+{% schema %}
+{
+  "name": "Article body",
+  "tag": "section",
+  "settings": [
+    { "type": "range", "id": "padding_top",    "label": "Padding top (px)",    "min": 0, "max": 200, "step": 8, "default": 32 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (px)", "min": 0, "max": 200, "step": 8, "default": 64 }
+  ],
+  "presets": [
+    { "name": "Article body" }
+  ]
+}
+{% endschema %}

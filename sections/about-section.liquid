@@ -1,0 +1,53 @@
+{%- comment -%}
+  About section — numbered editorial section ("I.", "II.", "III.").
+  Brief §11.9: "alternating photography and Cormorant body copy".
+  Composes via theme blocks (eyebrow / heading / body / hairline / image / pull-quote).
+{%- endcomment -%}
+
+<section
+  class="about-section"
+  style="
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    background: {% if section.settings.ground == 'sage' %}var(--sage){% elsif section.settings.ground == 'seaglass' %}var(--seaglass){% else %}var(--bone){% endif %};
+  "
+>
+  <div class="container-narrow">
+    {% content_for 'blocks' %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "ground",
+      "label": "Ground",
+      "default": "bone",
+      "options": [
+        { "value": "bone",     "label": "Bone" },
+        { "value": "sage",     "label": "Sage" },
+        { "value": "seaglass", "label": "Sea Glass" }
+      ]
+    },
+    { "type": "range", "id": "padding_top",    "label": "Padding top (px)",    "min": 0, "max": 200, "step": 8, "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (px)", "min": 0, "max": 200, "step": 8, "default": 80 }
+  ],
+  "blocks": [
+    { "type": "@theme" },
+    { "type": "@app" }
+  ],
+  "presets": [
+    {
+      "name": "About section",
+      "blocks": [
+        { "type": "eyebrow", "settings": { "text": "I.", "align": "left", "margin_bottom": 18 } },
+        { "type": "heading", "settings": { "text": "The breed.", "scale": "h2-italic", "tag": "h2", "align": "left", "margin_bottom": 24 } },
+        { "type": "body",    "settings": { "text": "<p>The English Springer Spaniel is the oldest of the British gundogs.</p>", "style": "editorial-body", "align": "left", "margin_bottom": 0 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

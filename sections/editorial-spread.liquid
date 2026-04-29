@@ -1,0 +1,144 @@
+{%- comment -%}
+  Editorial spread — two-column image + copy.
+  Used on home (Sage ground editorial moment), PDP story, About illustrations.
+  Brief §11.3 / §11.5.
+
+  Composition:
+    - Left column: image (or placeholder)
+    - Right column: blocks (eyebrow, heading, body, button, etc.)
+  Image / copy column order is swappable.
+{%- endcomment -%}
+
+{%- liquid
+  case section.settings.ground
+    when 'sage'
+      assign ground_var = 'var(--sage)'
+    when 'seaglass'
+      assign ground_var = 'var(--seaglass)'
+    when 'ink'
+      assign ground_var = 'var(--ink)'
+    when 'bone'
+      assign ground_var = 'var(--bone)'
+    else
+      assign ground_var = 'transparent'
+  endcase
+  assign image_first = section.settings.image_position
+  assign image_ratio = section.settings.image_ratio | default: '4-5'
+-%}
+
+<section
+  class="editorial-spread"
+  style="
+    background: {{ ground_var }};
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    {% if section.settings.ground == 'ink' %}color: var(--bone);{% endif %}
+  "
+>
+  <div class="container">
+    <div class="spread" style="
+      {% if image_first == 'right' %}direction: rtl;{% endif %}
+    ">
+      <div style="{% if image_first == 'right' %}direction: ltr;{% endif %}">
+        {%- if section.settings.image != blank -%}
+          <div class="ph ratio-{{ image_ratio }}">
+            {{ section.settings.image | image_url: width: 1600 | image_tag:
+                loading: 'lazy',
+                sizes: '(min-width: 1025px) 50vw, 100vw',
+                widths: '480, 720, 960, 1200, 1600',
+                alt: section.settings.image.alt | default: ''
+            }}
+          </div>
+        {%- else -%}
+          <div class="ph ratio-{{ image_ratio }} {{ section.settings.placeholder_tone }}">
+            <span class="ph-caption">{{ section.settings.placeholder_caption | default: 'EDITORIAL · Penguin/Bawden-style illustration' }}</span>
+            {% if section.settings.placeholder_corner != blank %}
+              <span class="ph-corner">{{ section.settings.placeholder_corner }}</span>
+            {% endif %}
+          </div>
+        {%- endif -%}
+      </div>
+      <div style="{% if image_first == 'right' %}direction: ltr;{% endif %}">
+        {% content_for 'blocks' %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Editorial spread",
+  "tag": "section",
+  "settings": [
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "select",
+      "id": "ground",
+      "label": "Ground",
+      "default": "sage",
+      "options": [
+        { "value": "none",     "label": "None" },
+        { "value": "bone",     "label": "Bone" },
+        { "value": "sage",     "label": "Sage" },
+        { "value": "seaglass", "label": "Sea Glass" },
+        { "value": "ink",      "label": "Soft Ink (dark)" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "default": "4-5",
+      "options": [
+        { "value": "4-5",  "label": "4:5" },
+        { "value": "1-1",  "label": "1:1" },
+        { "value": "3-4",  "label": "3:4" },
+        { "value": "16-9", "label": "16:9" }
+      ]
+    },
+    { "type": "range", "id": "padding_top",    "label": "Padding top (px)",    "min": 0, "max": 240, "step": 8, "default": 120 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (px)", "min": 0, "max": 240, "step": 8, "default": 120 },
+
+    { "type": "header", "content": "Image" },
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    {
+      "type": "select",
+      "id": "placeholder_tone",
+      "label": "Placeholder tone (no image)",
+      "default": "tone-deep",
+      "options": [
+        { "value": "tone-deep",     "label": "Deep" },
+        { "value": "tone-sage",     "label": "Sage" },
+        { "value": "tone-seaglass", "label": "Sea Glass" },
+        { "value": "tone-warm",     "label": "Warm" }
+      ]
+    },
+    { "type": "text", "id": "placeholder_caption", "label": "Placeholder caption", "default": "EDITORIAL · Penguin/Bawden-style illustration · the season cover" },
+    { "type": "text", "id": "placeholder_corner",  "label": "Placeholder corner tag", "default": "" }
+  ],
+  "blocks": [
+    { "type": "@theme" },
+    { "type": "@app" }
+  ],
+  "presets": [
+    {
+      "name": "Editorial spread",
+      "blocks": [
+        { "type": "eyebrow", "settings": { "text": "From the journal", "align": "left", "margin_bottom": 20 } },
+        { "type": "heading", "settings": { "text": "A short defense of the working dog at rest.", "scale": "page", "tag": "h2", "align": "left", "margin_bottom": 28 } },
+        { "type": "body",    "settings": { "text": "<p>The English Springer is a creature of two states: the field and the floor. The first is well-documented; the second, less so. A note on what the Springer does between the cover and the kitchen — and why it matters.</p>", "style": "editorial-body", "align": "left", "margin_bottom": 32 } },
+        { "type": "button",  "settings": { "label": "Read in the journal", "style": "link-italic", "align": "left", "margin_top": 0 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

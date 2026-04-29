@@ -1,0 +1,48 @@
+{%- comment -%}
+  Search overlay. Full-bleed Bone overlay with single Cormorant-italic input.
+  Brief §11.1 / §11.11.
+{%- endcomment -%}
+
+<div class="search-overlay" data-open="false" role="dialog" aria-modal="true" aria-label="{{ 'general.accessibility.search' | t }}">
+  <div style="position: absolute; top: 24px; right: 32px;">
+    <button class="icon-btn" data-close-drawer="search" aria-label="{{ 'general.accessibility.close' | t }}">
+      {%- render 'icon', icon: 'close', size: 20 -%}
+    </button>
+  </div>
+  <div class="search-inner">
+    <p class="eyebrow" style="color: var(--ink-60); margin-bottom: 24px;">{{ 'general.search.title' | t }}</p>
+
+    <form action="{{ routes.search_url }}" method="get" role="search">
+      <input
+        class="search-input"
+        type="search"
+        name="q"
+        placeholder="{{ settings.search_placeholder | default: 'Search the kennel.' }}"
+        aria-label="{{ 'general.search.placeholder' | t }}"
+        autocomplete="off"
+      >
+      <input type="hidden" name="options[prefix]" value="last">
+    </form>
+
+    <div style="margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px;">
+      <div>
+        <p class="eyebrow" style="color: var(--ink-60); margin-bottom: 14px;">Suggested</p>
+        <ul style="display: flex; flex-direction: column; gap: 10px;">
+          <li><a href="{{ routes.collections_url }}" class="link-italic">The current collection</a></li>
+          {%- if linklists['journal'] != blank -%}
+            <li><a href="/blogs/journal" class="link-italic">The journal</a></li>
+          {%- endif -%}
+          <li><a href="/pages/about" class="link-italic">About the club</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="eyebrow" style="color: var(--ink-60); margin-bottom: 14px;">Categories</p>
+        <ul style="display: flex; flex-direction: column; gap: 10px;">
+          {%- for collection in collections limit: 4 -%}
+            <li><a href="{{ collection.url }}" class="link-italic">{{ collection.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

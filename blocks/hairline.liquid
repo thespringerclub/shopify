@@ -1,0 +1,49 @@
+{%- comment -%}
+  Theme block — Hairline rule. 1px Soft Ink (or Clay, used sparingly per brief §5).
+{%- endcomment -%}
+
+{%- liquid
+  assign cls = 'hairline'
+  case block.settings.color
+    when 'soft'
+      assign cls = 'hairline-soft'
+    when 'clay'
+      assign cls = 'hairline-clay'
+  endcase
+-%}
+
+<div
+  style="
+    {% if block.settings.center %}margin: {{ block.settings.margin_top }}px auto {{ block.settings.margin_bottom }}px; max-width: {{ block.settings.width }}px;
+    {% else %}margin: {{ block.settings.margin_top }}px 0 {{ block.settings.margin_bottom }}px;{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  <div class="{{ cls }}"></div>
+</div>
+
+{% schema %}
+{
+  "name": "Hairline",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color",
+      "label": "Color",
+      "default": "ink",
+      "options": [
+        { "value": "ink",  "label": "Soft Ink" },
+        { "value": "soft", "label": "Soft Ink @ 12% (subtle)" },
+        { "value": "clay", "label": "Clay (single use per page max)" }
+      ]
+    },
+    { "type": "checkbox", "id": "center", "label": "Center as decorative rule", "default": true },
+    { "type": "range", "id": "width",         "label": "Width when centered (px)", "min": 20,  "max": 600, "step": 10, "default": 60 },
+    { "type": "range", "id": "margin_top",    "label": "Margin top (px)",          "min": 0,   "max": 120, "step": 4,  "default": 24 },
+    { "type": "range", "id": "margin_bottom", "label": "Margin bottom (px)",       "min": 0,   "max": 120, "step": 4,  "default": 24 }
+  ],
+  "presets": [
+    { "name": "Hairline" }
+  ]
+}
+{% endschema %}

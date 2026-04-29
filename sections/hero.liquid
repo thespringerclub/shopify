@@ -1,0 +1,179 @@
+{%- comment -%}
+  Hero — full-bleed editorial hero. Used on Home, Collection, Journal index, About.
+  Brief §11.3 / §11.4 / §11.9 / §11.10.
+
+  Background can be:
+    - A photograph (image_picker), or
+    - A solid tinted ground (Sage / Sea Glass / Bone / Ink), or
+    - A placeholder rectangle (when neither is set).
+
+  Content is composed of theme blocks (eyebrow, brand-lockup, heading, body,
+  button, hairline, spacer, script-line) — fully editable in the theme editor.
+{%- endcomment -%}
+
+{%- liquid
+  assign overlay_op = section.settings.overlay_opacity | divided_by: 100.0
+  assign vh = section.settings.height_vh
+  assign min = section.settings.min_height
+  assign content_color = section.settings.content_color | default: 'ink'
+  case section.settings.ground
+    when 'sage'
+      assign ground_var = 'var(--sage)'
+    when 'seaglass'
+      assign ground_var = 'var(--seaglass)'
+    when 'bone'
+      assign ground_var = 'var(--bone)'
+    when 'ink'
+      assign ground_var = 'var(--ink)'
+    else
+      assign ground_var = 'transparent'
+  endcase
+  assign content_align = section.settings.content_align | default: 'center'
+  assign content_position = section.settings.content_position | default: 'center'
+  case content_position
+    when 'top'
+      assign justify = 'flex-start'
+    when 'bottom'
+      assign justify = 'flex-end'
+    else
+      assign justify = 'center'
+  endcase
+-%}
+
+<section
+  class="hero-section bg-{% if section.settings.ground != 'none' %}{{ section.settings.ground }}{% endif %}"
+  style="
+    position: relative;
+    overflow: hidden;
+    height: min({{ vh }}vh, {{ section.settings.max_height }}px);
+    min-height: {{ min }}px;
+    background: {{ ground_var }};
+    {% if content_color == 'bone' %}color: var(--bone);{% endif %}
+  "
+>
+  {%- comment -%} Background layer {%- endcomment -%}
+  {%- if section.settings.image != blank -%}
+    <div style="position: absolute; inset: 0;">
+      {{ section.settings.image | image_url: width: 2400 | image_tag:
+          loading: 'eager',
+          sizes: '100vw',
+          widths: '720, 1080, 1440, 1920, 2400',
+          alt: section.settings.image.alt | default: section.settings.heading,
+          style: 'width:100%; height:100%; object-fit: cover;'
+      }}
+    </div>
+  {%- elsif section.settings.show_placeholder and section.settings.ground == 'none' -%}
+    <div class="ph tone-deep" style="position: absolute; inset: 0;">
+      <span class="ph-caption">{{ section.settings.placeholder_caption | default: 'HERO · atmospheric photography' }}</span>
+      <span class="ph-corner">{{ section.settings.placeholder_corner | default: '21:9 · Atmospheric' }}</span>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Overlay {%- endcomment -%}
+  {%- if section.settings.image != blank or section.settings.show_placeholder -%}
+    {%- if overlay_op > 0 -%}
+      <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(44,42,40,{{ overlay_op | times: 0.4 }}) 0%, rgba(44,42,40,{{ overlay_op }}) 100%);"></div>
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- comment -%} Content {%- endcomment -%}
+  <div
+    style="
+      position: relative;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: {% if content_align == 'left' %}flex-start{% elsif content_align == 'right' %}flex-end{% else %}center{% endif %};
+      justify-content: {{ justify }};
+      text-align: {{ content_align }};
+      padding: {{ section.settings.padding_top }}px var(--container-pad) {{ section.settings.padding_bottom }}px;
+    "
+  >
+    <div style="max-width: {{ section.settings.content_max_width }}px; width: 100%;">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "section",
+  "class": "section--hero",
+  "settings": [
+    { "type": "header", "content": "Background" },
+    { "type": "image_picker", "id": "image", "label": "Background image" },
+    {
+      "type": "select",
+      "id": "ground",
+      "label": "Ground color (when no image)",
+      "default": "none",
+      "options": [
+        { "value": "none",     "label": "None" },
+        { "value": "bone",     "label": "Bone" },
+        { "value": "sage",     "label": "Sage" },
+        { "value": "seaglass", "label": "Sea Glass" },
+        { "value": "ink",      "label": "Soft Ink (dark)" }
+      ]
+    },
+    { "type": "checkbox", "id": "show_placeholder", "label": "Show labeled placeholder if no image", "default": true },
+    { "type": "text", "id": "placeholder_caption", "label": "Placeholder caption", "default": "HERO · Springer at a shingled porch, Nantucket morning, soft diffused light" },
+    { "type": "text", "id": "placeholder_corner",  "label": "Placeholder corner tag", "default": "21:9 · Atmospheric" },
+    { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity (%)", "min": 0, "max": 80, "step": 5, "default": 35 },
+
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "height_vh", "label": "Height (% of viewport)", "min": 40, "max": 100, "step": 5, "default": 90 },
+    { "type": "range", "id": "max_height", "label": "Max height (px)", "min": 480, "max": 1200, "step": 20, "default": 900 },
+    { "type": "range", "id": "min_height", "label": "Min height (px)", "min": 320, "max": 800, "step": 20, "default": 640 },
+    { "type": "range", "id": "padding_top",    "label": "Padding top (px)",    "min": 0, "max": 240, "step": 8, "default": 120 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (px)", "min": 0, "max": 240, "step": 8, "default": 80 },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Content vertical position",
+      "default": "center",
+      "options": [
+        { "value": "top",    "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "content_align",
+      "label": "Content alignment",
+      "default": "center",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "content_color",
+      "label": "Content color",
+      "default": "bone",
+      "options": [
+        { "value": "ink",  "label": "Ink (light grounds)" },
+        { "value": "bone", "label": "Bone (over photography or dark grounds)" }
+      ]
+    },
+    { "type": "range", "id": "content_max_width", "label": "Content max width (px)", "min": 320, "max": 1200, "step": 20, "default": 720 }
+  ],
+  "blocks": [
+    { "type": "@theme" },
+    { "type": "@app" }
+  ],
+  "presets": [
+    {
+      "name": "Hero",
+      "blocks": [
+        { "type": "brand-lockup", "settings": { "variant": "stacked", "color": "bone", "scale": 1, "align": "center", "margin_bottom": 32 } },
+        { "type": "body", "settings": { "text": "<p>Found wherever the birds are.</p>", "style": "editorial-italic", "font_size_em": 1.375, "color": "var(--bone)", "align": "center", "margin_bottom": 28 } },
+        { "type": "eyebrow", "settings": { "text": "Members in Good Standing — Est. 2026", "color": "var(--bone)", "align": "center", "margin_bottom": 0 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,80 @@
+{%- comment -%}
+  About teaser — centered teaser block with optional illustration / mark.
+  Brief §11.3 (homepage About-the-club teaser).
+{%- endcomment -%}
+
+{%- liquid
+  case section.settings.ground
+    when 'sage'
+      assign ground_var = 'var(--sage)'
+    when 'seaglass'
+      assign ground_var = 'var(--seaglass)'
+    else
+      assign ground_var = 'var(--bone)'
+  endcase
+-%}
+
+<section
+  class="about-teaser"
+  style="
+    background: {{ ground_var }};
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="container-narrow text-center">
+    {%- if section.settings.illustration != blank -%}
+      <div style="display: flex; justify-content: center; margin-bottom: 32px;">
+        {{ section.settings.illustration | image_url: width: 240 | image_tag:
+            alt: section.settings.illustration.alt | default: 'Illustration',
+            style: 'width: 120px; height: auto;'
+        }}
+      </div>
+    {%- elsif section.settings.show_mark_placeholder -%}
+      <div style="margin-bottom: 32px;">
+        {%- render 'mark-placeholder', label: section.settings.mark_label, width: 120, height: 120, color: 'ink' -%}
+      </div>
+    {%- endif -%}
+
+    {% content_for 'blocks' %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About teaser",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "ground",
+      "label": "Ground",
+      "default": "bone",
+      "options": [
+        { "value": "bone",     "label": "Bone" },
+        { "value": "sage",     "label": "Sage" },
+        { "value": "seaglass", "label": "Sea Glass" }
+      ]
+    },
+    { "type": "image_picker", "id": "illustration", "label": "Small illustration / mark" },
+    { "type": "checkbox", "id": "show_mark_placeholder", "label": "Show labeled mark placeholder if no illustration", "default": true },
+    { "type": "text", "id": "mark_label", "label": "Mark placeholder label", "default": "ILLUSTRATION · BAWDEN-STYLE SPRINGER" },
+    { "type": "range", "id": "padding_top",    "label": "Padding top (px)",    "min": 0, "max": 200, "step": 8, "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (px)", "min": 0, "max": 200, "step": 8, "default": 96 }
+  ],
+  "blocks": [
+    { "type": "@theme" },
+    { "type": "@app" }
+  ],
+  "presets": [
+    {
+      "name": "About teaser",
+      "blocks": [
+        { "type": "eyebrow", "settings": { "text": "About the club", "align": "center", "margin_bottom": 18 } },
+        { "type": "heading", "settings": { "text": "An old breed, kept seriously.", "scale": "page", "tag": "h2", "align": "center", "margin_bottom": 20 } },
+        { "type": "body",    "settings": { "text": "<p>The Springer Club is a small house built around the English Springer Spaniel and the world that surrounds it — the country house, the sporting weekend, the hand-thatched fishing camp, the coastal cottage.</p>", "style": "editorial-body", "align": "center", "max_width": 58, "margin_bottom": 36 } },
+        { "type": "button",  "settings": { "label": "The tradition", "style": "link", "align": "center" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

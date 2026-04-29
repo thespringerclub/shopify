@@ -1,0 +1,40 @@
+{
+  "sections": {
+    "main": {
+      "type": "product-main",
+      "settings": {
+        "show_breadcrumb": true,
+        "show_subtitle": true,
+        "show_description": true,
+        "show_specs": true,
+        "show_shipping": true,
+        "fulfillment_microcopy": "Currently in good order. Ships within five working days.",
+        "extra_placeholder_images": 6
+      }
+    },
+    "story": {
+      "type": "product-story",
+      "settings": {
+        "padding_top": 96,
+        "placeholder_caption": "EDITORIAL · the SKU's cultural insight as illustration"
+      }
+    },
+    "mark": {
+      "type": "product-mark",
+      "settings": {
+        "eyebrow": "The mark",
+        "title": "Drawn for the club, in the editorial register.",
+        "body": "<p>The mark is rendered in Soft Ink chain-stitch on Bone, three inches wide, drawn for The Springer Club in the editorial register of mid-century book illustration. It is small, on the left chest. It is not a logo.</p>"
+      }
+    },
+    "related": {
+      "type": "product-related",
+      "settings": {
+        "heading": "Pairs well with",
+        "limit": 3,
+        "padding_top": 96
+      }
+    }
+  },
+  "order": ["main", "story", "mark", "related"]
+}

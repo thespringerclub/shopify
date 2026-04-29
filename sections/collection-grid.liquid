@@ -1,0 +1,110 @@
+{%- comment -%}
+  Collection grid. Brief §11.4.
+  3-column desktop, 2-column tablet, 1-column mobile.
+  Sort bar above. Optional filters (left out for v1.0 per brief).
+  End-of-collection moment beneath the grid.
+{%- endcomment -%}
+
+{%- liquid
+  assign columns = section.settings.columns | default: 3
+  assign current_sort = collection.sort_by | default: collection.default_sort_by
+-%}
+
+<section style="padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;">
+  {%- comment -%} Sort bar {%- endcomment -%}
+  <div style="border-bottom: 1px solid var(--ink-12);">
+    <div class="container flex-between" style="padding-top: 20px; padding-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+      <span class="small text-muted">
+        {%- if collection.products.size > 0 -%}
+          Showing {{ collection.products_count | default: collection.products.size }}
+          {%- if collection.all_products_count -%}
+            of {{ collection.all_products_count }}
+          {%- endif -%}
+        {%- else -%}
+          No items currently on the rolls.
+        {%- endif -%}
+      </span>
+      {%- if section.settings.show_sort and collection.sort_options.size > 0 -%}
+        <form class="sort-form" style="display: flex; gap: 24px; align-items: center; flex-wrap: wrap;">
+          <span class="eyebrow text-muted">{{ 'products.facets.sort_by' | t }}</span>
+          {%- for option in collection.sort_options -%}
+            <a
+              href="{{ collection.url }}?sort_by={{ option.value }}"
+              class="small {% if option.value == current_sort %}{% else %}text-muted{% endif %}"
+              style="border-bottom: 1px solid {% if option.value == current_sort %}var(--ink){% else %}transparent{% endif %};"
+            >{{ option.name }}</a>
+          {%- endfor -%}
+        </form>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <div class="container" style="padding-top: 80px;">
+    {%- paginate collection.products by section.settings.products_per_page -%}
+      {%- if collection.products.size > 0 -%}
+        <div class="collection-grid" style="grid-template-columns: repeat({{ columns }}, 1fr);">
+          {%- for product in collection.products -%}
+            {%- render 'product-card', product: product -%}
+          {%- endfor -%}
+        </div>
+        {%- render 'pagination', paginate: paginate -%}
+      {%- else -%}
+        <div style="padding: 80px 0; text-align: center;">
+          <p class="serif-italic" style="font-size: 1.5rem;">{{ section.settings.empty_message | default: 'Currently between runs. Notify the kennel.' }}</p>
+        </div>
+      {%- endif -%}
+    {%- endpaginate -%}
+
+    {%- if section.settings.show_end_moment -%}
+      <div style="margin-top: 120px; padding-top: 64px; border-top: 1px solid var(--ink-12); text-align: center;">
+        <p class="serif-italic" style="font-size: 1.5rem; max-width: 48ch; margin: 0 auto 24px;">
+          {{- section.settings.end_message | default: 'The current rolls. Further moments live in the journal.' -}}
+        </p>
+        {%- if section.settings.end_link != blank -%}
+          <a href="{{ section.settings.end_link }}" class="link-italic">
+            {{- section.settings.end_link_label | default: 'The journal' -}}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  @media (max-width: 1024px) and (min-width: 641px) {
+    .collection-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection grid",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Desktop columns",
+      "default": "3",
+      "options": [
+        { "value": "2", "label": "Two" },
+        { "value": "3", "label": "Three" },
+        { "value": "4", "label": "Four" }
+      ]
+    },
+    { "type": "range", "id": "products_per_page", "label": "Products per page", "min": 6, "max": 36, "step": 3, "default": 9, "info": "Brief §11.4: load 9 at a time." },
+    { "type": "checkbox", "id": "show_sort", "label": "Show sort bar", "default": true },
+    { "type": "text", "id": "empty_message", "label": "Empty message", "default": "Currently between runs. Notify the kennel." },
+    { "type": "header", "content": "End-of-collection moment" },
+    { "type": "checkbox", "id": "show_end_moment", "label": "Show closing line + journal link", "default": true },
+    { "type": "text", "id": "end_message", "label": "Closing line", "default": "The current rolls. Further moments live in the journal." },
+    { "type": "url",  "id": "end_link", "label": "Closing link" },
+    { "type": "text", "id": "end_link_label", "label": "Closing link label", "default": "The journal" },
+    { "type": "range", "id": "padding_top",    "label": "Padding top (px)",    "min": 0, "max": 200, "step": 8, "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (px)", "min": 0, "max": 200, "step": 8, "default": 96 }
+  ],
+  "presets": [
+    { "name": "Collection grid" }
+  ]
+}
+{% endschema %}

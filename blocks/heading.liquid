@@ -1,0 +1,94 @@
+{%- comment -%}
+  Theme block — Heading. Cormorant Garamond, italic by default.
+  Tag is selectable; only one h1 per page should be used.
+{%- endcomment -%}
+
+{%- liquid
+  assign tag = block.settings.tag | default: 'h2'
+  assign cls = 'h2-italic'
+  case block.settings.scale
+    when 'hero'
+      assign cls = 'h1-hero serif-italic'
+    when 'page'
+      assign cls = 'h1-page serif-italic'
+    when 'h2-italic'
+      assign cls = 'h2-italic'
+    when 'h2'
+      assign cls = 'h2'
+    when 'h3'
+      assign cls = 'h3'
+  endcase
+-%}
+
+<{{ tag }}
+  class="{{ cls }}"
+  style="
+    color: {{ block.settings.color | default: 'var(--ink)' }};
+    {% if block.settings.align %}text-align: {{ block.settings.align }};{% endif %}
+    {% if block.settings.margin_top != blank %}margin-top: {{ block.settings.margin_top }}px;{% endif %}
+    {% if block.settings.margin_bottom != blank %}margin-bottom: {{ block.settings.margin_bottom }}px;{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>{{ block.settings.text }}</{{ tag }}>
+
+{% schema %}
+{
+  "name": "Heading",
+  "settings": [
+    { "type": "text", "id": "text", "label": "Heading", "default": "Found wherever the birds are." },
+    {
+      "type": "select",
+      "id": "scale",
+      "label": "Scale",
+      "default": "page",
+      "info": "Brief §6 type scale.",
+      "options": [
+        { "value": "hero",      "label": "H1 hero (3.5rem)" },
+        { "value": "page",      "label": "H1 page (2.75rem)" },
+        { "value": "h2-italic", "label": "H2 italic (2rem)" },
+        { "value": "h2",        "label": "H2 regular (2rem)" },
+        { "value": "h3",        "label": "H3 italic (1.25rem)" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "tag",
+      "label": "HTML tag",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "h1" },
+        { "value": "h2", "label": "h2" },
+        { "value": "h3", "label": "h3" },
+        { "value": "p",  "label": "p" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "color",
+      "label": "Color",
+      "default": "var(--ink)",
+      "options": [
+        { "value": "var(--ink)",  "label": "Ink" },
+        { "value": "var(--bone)", "label": "Bone (on dark grounds)" },
+        { "value": "var(--clay)", "label": "Clay" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Alignment",
+      "default": "left",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ]
+    },
+    { "type": "range", "id": "margin_top",    "label": "Margin top (px)",    "min": 0, "max": 80, "step": 2, "default": 0 },
+    { "type": "range", "id": "margin_bottom", "label": "Margin bottom (px)", "min": 0, "max": 80, "step": 2, "default": 24 }
+  ],
+  "presets": [
+    { "name": "Heading" }
+  ]
+}
+{% endschema %}

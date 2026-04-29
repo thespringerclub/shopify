@@ -1,0 +1,60 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "blocks": {
+        "eyebrow": {
+          "type": "eyebrow",
+          "settings": { "text": "Editorial", "color": "var(--ink)", "align": "center", "margin_bottom": 24 }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "The journal.",
+            "scale": "hero",
+            "tag": "h1",
+            "color": "var(--ink)",
+            "align": "center",
+            "margin_bottom": 32
+          }
+        },
+        "intro": {
+          "type": "body",
+          "settings": {
+            "text": "<p>A monthly correspondence on the breed, the field, and the world that surrounds them.</p>",
+            "style": "editorial-italic",
+            "font_size_em": 1.375,
+            "align": "center",
+            "max_width": 48,
+            "margin_bottom": 0
+          }
+        }
+      },
+      "block_order": ["eyebrow", "heading", "intro"],
+      "settings": {
+        "ground": "bone",
+        "show_placeholder": false,
+        "overlay_opacity": 0,
+        "height_vh": 50,
+        "max_height": 600,
+        "min_height": 360,
+        "padding_top": 120,
+        "padding_bottom": 64,
+        "content_position": "center",
+        "content_align": "center",
+        "content_color": "ink",
+        "content_max_width": 720
+      }
+    },
+    "grid": {
+      "type": "journal-grid",
+      "settings": {
+        "columns": "2",
+        "per_page": 8,
+        "padding_top": 64,
+        "padding_bottom": 96
+      }
+    }
+  },
+  "order": ["hero", "grid"]
+}

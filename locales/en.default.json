@@ -1,0 +1,116 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "Skip to content",
+      "close": "Close",
+      "menu": "Menu",
+      "search": "Search",
+      "account": "Account",
+      "bag": "Bag"
+    },
+    "search": {
+      "title": "In the rolls.",
+      "placeholder": "Search the kennel.",
+      "submit": "Search",
+      "no_results": "No matches in the current rolls.",
+      "browse": "Browse the collection."
+    },
+    "404": {
+      "eyebrow": "404",
+      "title": "You appear to be off-trail.",
+      "subtitle": "This page is currently flushed.",
+      "link": "Return to the collection."
+    },
+    "newsletter": {
+      "heading": "Join the rolls.",
+      "caption": "Quiet correspondence, infrequent.",
+      "placeholder": "Address",
+      "submit": "Submit",
+      "success": "On the rolls. The kennel has been notified.",
+      "error": "Address could not be enrolled. Try again."
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_bag": "Add to bag.",
+      "sold_out": "Currently between runs.",
+      "notify": "Notify the kennel.",
+      "find_a_fitting": "Find a fitting",
+      "color": "Color",
+      "size": "Size",
+      "specifications": "Specifications.",
+      "shipping_returns": "Shipping & returns.",
+      "ships_microcopy": "Currently in good order. Ships within five working days.",
+      "pairs_well_with": "Pairs well with",
+      "the_mark": "The mark",
+      "from_the_journal": "From the journal"
+    },
+    "facets": {
+      "sort_by": "Sort by",
+      "newest": "Newest",
+      "price": "Price",
+      "tradition": "Tradition",
+      "showing": "Showing {{ count }} of {{ total }}"
+    }
+  },
+  "cart": {
+    "title": "In the bag.",
+    "subtotal": "Subtotal.",
+    "checkout": "Proceed to checkout.",
+    "empty": "The bag is currently empty. Browse the collection.",
+    "browse_collection": "The collection",
+    "remove": "Remove",
+    "increase": "Increase quantity",
+    "decrease": "Decrease quantity"
+  },
+  "customer": {
+    "login_title": "Members in Good Standing.",
+    "login_subtitle": "",
+    "register_title": "Join the rolls.",
+    "register_subtitle": "Three fields. A short formality.",
+    "email": "Email address",
+    "password": "Password",
+    "name": "Name",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "sign_in": "Sign in.",
+    "sign_out": "Sign out",
+    "register": "Join.",
+    "forgot_password": "Forgot the password? Recover.",
+    "reset_password": "Recover the password.",
+    "reset_subtitle": "Enter the address on the rolls. A recovery line will be sent.",
+    "submit_recover": "Send recovery.",
+    "not_yet_on_rolls": "Not yet on the rolls?",
+    "join_the_rolls": "Join the rolls.",
+    "good_morning": "Good morning,",
+    "recent_orders": "Recent orders.",
+    "saved_addresses": "Saved addresses.",
+    "members_in_good_standing_since": "Members in good standing — since {{ year }}.",
+    "members_paragraph": "You are currently on the rolls. Quiet correspondence will arrive infrequently. Sign out of the kennel at any moment.",
+    "no_orders": "No orders yet on the rolls.",
+    "default_address": "Default address",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add_address": "Add address",
+    "addresses_title": "Saved addresses.",
+    "order_title": "Order {{ name }}.",
+    "order_status": "Status",
+    "order_fulfillment": "Fulfillment",
+    "order_payment": "Payment",
+    "order_billing": "Billing address",
+    "order_shipping": "Shipping address"
+  },
+  "blogs": {
+    "article": {
+      "by_author": "By {{ author }}",
+      "continue": "Continue.",
+      "previous": "Previous entry",
+      "next": "Next entry"
+    }
+  },
+  "sections": {
+    "header": {
+      "menu": "Menu"
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{%- comment -%}
+  Article hero. Brief §11.10.
+  Hero image (illustration or photography) at 21:9 / 16:9, then italic Cormorant title centered with date and author.
+{%- endcomment -%}
+
+{%- liquid
+  assign ratio = section.settings.ratio | default: '21-9'
+  assign tone = article.metafields.springer.tone | default: 'tone-sage'
+-%}
+
+<section>
+  <div class="ph ratio-{{ ratio }} {% if article.image == blank %}{{ tone }}{% endif %}" style="min-height: 360px;">
+    {%- if article.image != blank -%}
+      {{ article.image | image_url: width: 2400 | image_tag:
+          loading: 'eager',
+          sizes: '100vw',
+          widths: '720, 1080, 1440, 1920, 2400',
+          alt: article.image.alt | default: article.title
+      }}
+    {%- else -%}
+      <span class="ph-caption">{{ section.settings.placeholder_caption | default: 'JOURNAL HERO · BAWDEN-STYLE ILLUSTRATION · A FIELD IN MAY' }}</span>
+    {%- endif -%}
+  </div>
+</section>
+
+<section style="padding: 80px 0 32px;">
+  <div class="container-narrow text-center">
+    <p class="eyebrow text-muted" style="margin-bottom: 18px;">
+      {{ article.published_at | date: '%B %Y' }}
+      {%- if article.author != blank %} · By {{ article.author }}{% endif -%}
+    </p>
+    <h1 class="h1-page serif-italic" style="margin-bottom: 0;">{{ article.title }}</h1>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Article hero",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "ratio",
+      "label": "Aspect ratio",
+      "default": "21-9",
+      "options": [
+        { "value": "21-9", "label": "21:9" },
+        { "value": "16-9", "label": "16:9" }
+      ]
+    },
+    { "type": "text", "id": "placeholder_caption", "label": "Placeholder caption", "default": "JOURNAL HERO · BAWDEN-STYLE ILLUSTRATION · A FIELD IN MAY" }
+  ],
+  "presets": [
+    { "name": "Article hero" }
+  ]
+}
+{% endschema %}

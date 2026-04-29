@@ -1,0 +1,75 @@
+{%- comment -%}
+  Search results page. Brief §11.11.
+  Tabs: Apparel / Journal. Tabs are hairline-rule indicated, not pills.
+{%- endcomment -%}
+
+{%- liquid
+  assign current_type = request.search_params.type | default: search.types | join: ',' | default: 'product,article'
+  assign types_csv = section.settings.search_types | default: 'product,article'
+-%}
+
+<section style="padding: 80px 0;">
+  <div class="container">
+    <p class="eyebrow text-muted text-center" style="margin-bottom: 16px;">In the rolls</p>
+    <h1 class="h1-page serif-italic text-center" style="margin-bottom: 32px;">In the rolls.</h1>
+
+    <form action="{{ routes.search_url }}" method="get" role="search" style="max-width: 720px; margin: 0 auto 48px;">
+      <input
+        class="search-input"
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ settings.search_placeholder | default: 'Search the kennel.' }}"
+        aria-label="Search"
+      >
+      <input type="hidden" name="options[prefix]" value="last">
+      <input type="hidden" name="type" value="{{ types_csv }}">
+    </form>
+
+    {%- if search.performed -%}
+      {%- if search.results.size > 0 -%}
+        <div class="search-results">
+          {%- assign products = search.results | where: 'object_type', 'product' -%}
+          {%- assign articles = search.results | where: 'object_type', 'article' -%}
+
+          {%- if products.size > 0 -%}
+            <h2 class="h2-italic" style="margin: 48px 0 24px;">Apparel.</h2>
+            <div class="collection-grid" style="grid-template-columns: repeat(3, 1fr);">
+              {%- for product in products -%}
+                {%- render 'product-card', product: product -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
+          {%- if articles.size > 0 -%}
+            <h2 class="h2-italic" style="margin: 80px 0 24px;">The journal.</h2>
+            <div class="journal-grid">
+              {%- for article in articles -%}
+                {%- render 'journal-card', article: article -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- else -%}
+        <div class="text-center" style="padding: 80px 0;">
+          <p class="serif-italic" style="font-size: 1.5rem; margin-bottom: 24px;">{{ settings.search_empty | default: 'No matches in the current rolls. Browse the collection.' }}</p>
+          <a href="{{ routes.collections_url }}" class="link-italic">The collection</a>
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <p class="serif-italic text-center" style="font-size: 1.0625rem; color: var(--ink-60);">
+        Enter a term to search the rolls.
+      </p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Search results",
+  "tag": "section",
+  "settings": [
+    { "type": "text", "id": "search_types", "label": "Search types (CSV)", "default": "product,article", "info": "Comma-separated. e.g. product,article,page" }
+  ]
+}
+{% endschema %}

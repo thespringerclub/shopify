@@ -1,0 +1,97 @@
+{%- comment -%}
+  Image break — full-width or contained editorial image break.
+  Used as section break on About / Journal entries.
+{%- endcomment -%}
+
+{%- liquid
+  assign ratio = section.settings.ratio | default: '16-9'
+  assign tone = section.settings.placeholder_tone | default: 'tone-sage'
+  assign full_bleed = section.settings.full_bleed
+-%}
+
+<section
+  class="image-break"
+  style="
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    background: var(--bone);
+  "
+>
+  {%- if full_bleed -%}
+    <div class="ph ratio-{{ ratio }} {% if section.settings.image == blank %}{{ tone }}{% endif %}">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 2400 | image_tag:
+            loading: 'lazy',
+            sizes: '100vw',
+            widths: '720, 1080, 1440, 1920, 2400',
+            alt: section.settings.image.alt | default: section.settings.placeholder_caption
+        }}
+      {%- else -%}
+        <span class="ph-caption">{{ section.settings.placeholder_caption }}</span>
+        {% if section.settings.placeholder_corner != blank %}
+          <span class="ph-corner">{{ section.settings.placeholder_corner }}</span>
+        {% endif %}
+      {%- endif -%}
+    </div>
+  {%- else -%}
+    <div class="container-narrow">
+      <div class="ph ratio-{{ ratio }} {% if section.settings.image == blank %}{{ tone }}{% endif %}">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1600 | image_tag:
+              loading: 'lazy',
+              sizes: '(min-width: 1025px) 880px, 100vw',
+              widths: '480, 720, 960, 1200, 1600',
+              alt: section.settings.image.alt | default: section.settings.placeholder_caption
+          }}
+        {%- else -%}
+          <span class="ph-caption">{{ section.settings.placeholder_caption }}</span>
+          {% if section.settings.placeholder_corner != blank %}
+            <span class="ph-corner">{{ section.settings.placeholder_corner }}</span>
+          {% endif %}
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Image break",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    {
+      "type": "select",
+      "id": "ratio",
+      "label": "Aspect ratio",
+      "default": "16-9",
+      "options": [
+        { "value": "16-9", "label": "16:9" },
+        { "value": "21-9", "label": "21:9" },
+        { "value": "4-5",  "label": "4:5" },
+        { "value": "3-4",  "label": "3:4" },
+        { "value": "1-1",  "label": "1:1" }
+      ]
+    },
+    { "type": "checkbox", "id": "full_bleed", "label": "Full bleed", "default": false },
+    {
+      "type": "select",
+      "id": "placeholder_tone",
+      "label": "Placeholder tone (no image)",
+      "default": "tone-sage",
+      "options": [
+        { "value": "tone-deep",     "label": "Deep" },
+        { "value": "tone-sage",     "label": "Sage" },
+        { "value": "tone-seaglass", "label": "Sea Glass" },
+        { "value": "tone-warm",     "label": "Warm" }
+      ]
+    },
+    { "type": "text", "id": "placeholder_caption", "label": "Placeholder caption", "default": "SECTION BREAK · BAWDEN-STYLE ILLUSTRATION · A FIELD IN MAY" },
+    { "type": "text", "id": "placeholder_corner",  "label": "Placeholder corner tag", "default": "" },
+    { "type": "range", "id": "padding_top",    "label": "Padding top (px)",    "min": 0, "max": 200, "step": 8, "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (px)", "min": 0, "max": 200, "step": 8, "default": 80 }
+  ],
+  "presets": [
+    { "name": "Image break" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,88 @@
+{%- comment -%}
+  Theme block — Body / editorial paragraph. Brief §6.
+  Italic Cormorant for emotional voice; Inter for body workhorse.
+{%- endcomment -%}
+
+{%- liquid
+  assign cls = 'editorial-body'
+  case block.settings.style
+    when 'editorial-italic'
+      assign cls = 'serif-italic'
+    when 'editorial-body'
+      assign cls = 'editorial-body'
+    when 'body'
+      assign cls = 'body'
+    when 'small'
+      assign cls = 'small'
+  endcase
+-%}
+
+<div
+  class="{{ cls }}"
+  style="
+    {% if block.settings.font_size_em != blank %}font-size: {{ block.settings.font_size_em }}em;{% endif %}
+    {% if block.settings.color %}color: {{ block.settings.color }};{% endif %}
+    {% if block.settings.align %}text-align: {{ block.settings.align }};{% endif %}
+    {% if block.settings.max_width != blank and block.settings.max_width > 0 %}max-width: {{ block.settings.max_width }}ch; margin-left: auto; margin-right: auto;{% endif %}
+    {% if block.settings.margin_top != blank %}margin-top: {{ block.settings.margin_top }}px;{% endif %}
+    {% if block.settings.margin_bottom != blank %}margin-bottom: {{ block.settings.margin_bottom }}px;{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {{ block.settings.text }}
+</div>
+
+{% schema %}
+{
+  "name": "Body text",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Body",
+      "default": "<p>Made for the porch, the field, and the long way home — drawn in the editorial register of mid-century book illustration, embroidered as the brand has always embroidered.</p>"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "default": "editorial-italic",
+      "options": [
+        { "value": "editorial-italic", "label": "Cormorant italic (emotional)" },
+        { "value": "editorial-body",   "label": "Inter editorial (long-form, 1.7 line-height)" },
+        { "value": "body",             "label": "Inter body" },
+        { "value": "small",            "label": "Inter small" }
+      ]
+    },
+    { "type": "range", "id": "font_size_em", "label": "Font size (em)", "min": 0.875, "max": 1.875, "step": 0.0625, "default": 1, "unit": "em" },
+    {
+      "type": "select",
+      "id": "color",
+      "label": "Color",
+      "default": "var(--ink)",
+      "options": [
+        { "value": "var(--ink)",    "label": "Ink" },
+        { "value": "var(--ink-60)", "label": "Muted ink" },
+        { "value": "var(--bone)",   "label": "Bone (on dark grounds)" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Alignment",
+      "default": "left",
+      "options": [
+        { "value": "left",   "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right" }
+      ]
+    },
+    { "type": "range", "id": "max_width",     "label": "Max width (ch)",    "min": 0, "max": 80, "step": 2, "default": 0, "info": "0 = no constraint" },
+    { "type": "range", "id": "margin_top",    "label": "Margin top (px)",    "min": 0, "max": 80, "step": 2, "default": 0 },
+    { "type": "range", "id": "margin_bottom", "label": "Margin bottom (px)", "min": 0, "max": 80, "step": 2, "default": 0 }
+  ],
+  "presets": [
+    { "name": "Body text" }
+  ]
+}
+{% endschema %}

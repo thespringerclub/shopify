@@ -1,0 +1,47 @@
+{%- comment -%}
+  Member card. Brief §11.8 / §12.
+  Bone fill, 1px Soft Ink border, Audubon logomark in Clay foil treatment,
+  customer name in Pinyon Script.
+{%- endcomment -%}
+
+{%- liquid
+  assign customer_name = customer.first_name | default: customer.name | default: 'Member'
+  if customer.last_name != blank
+    assign customer_name = customer.first_name | append: ' ' | append: customer.last_name
+  endif
+  assign member_no = customer.id | default: 0 | modulo: 10000
+  assign member_no_str = member_no | prepend: '0000' | slice: -4, 4
+  assign since_year = customer.created_at | date: '%Y' | default: 'shop.now | date: \'%Y\''
+  if since_year == blank
+    assign since_year = '2026'
+  endif
+  assign since_month = customer.created_at | date: '%B'
+-%}
+
+<div class="member-card">
+  <div class="flex-between" style="align-items: flex-start;">
+    <p class="eyebrow text-muted">Member · No. {{ member_no_str }}</p>
+    <span class="stamp">
+      {%- render 'brand-lockup', variant: 'logomark', color: 'ink', use_clay: true, scale: 1.6 -%}
+    </span>
+  </div>
+
+  <div>
+    <p class="name">{{ customer_name }}</p>
+    <p class="serif-italic meta" style="font-size: 1rem; margin-top: 8px;">
+      Member in Good Standing
+      {%- if since_month != blank -%}
+        · Since {{ since_month }} {{ since_year }}
+      {%- else -%}
+        · Since {{ since_year }}
+      {%- endif -%}
+    </p>
+  </div>
+
+  <div class="hairline-soft"></div>
+
+  <div class="flex-between">
+    <span class="micro text-muted">{{ shop.name | upcase }}</span>
+    <span class="micro text-muted">FOUND WHEREVER THE BIRDS ARE</span>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+{
+  "sections": {
+    "hero": {
+      "type": "article-hero",
+      "settings": {
+        "ratio": "21-9",
+        "placeholder_caption": "JOURNAL HERO · BAWDEN-STYLE ILLUSTRATION · A FIELD IN MAY"
+      }
+    },
+    "body": {
+      "type": "article-body",
+      "settings": { "padding_top": 32, "padding_bottom": 64 }
+    },
+    "continue": {
+      "type": "article-continue",
+      "settings": { "padding_top": 64 }
+    }
+  },
+  "order": ["hero", "body", "continue"]
+}

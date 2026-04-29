@@ -1,0 +1,56 @@
+{%- comment -%}
+  Product mark detail. Brief §11.5.
+  Two columns: large mark close-up on left, descriptive copy on right.
+{%- endcomment -%}
+
+{%- liquid
+  assign p = product
+  assign m = p.metafields.springer
+  assign mark_image = section.settings.image_override | default: m.mark_image
+  assign mark_label = section.settings.label_override | default: m.mark_label | default: p.title | upcase
+-%}
+
+<section style="padding: 80px 0; border-top: 1px solid var(--ink-12);">
+  <div class="container spread" style="grid-template-columns: 1fr 1fr; align-items: center;">
+    <div style="background: #fff; border: 1px solid var(--ink-12); padding: 80px; display: flex; justify-content: center;">
+      {%- if mark_image != blank -%}
+        {{ mark_image | image_url: width: 600 | image_tag:
+            loading: 'lazy',
+            alt: 'Mark detail',
+            style: 'max-width: 260px; height: auto;'
+        }}
+      {%- else -%}
+        {%- render 'mark-placeholder', label: 'MARK · ' | append: mark_label | append: ' · CHAIN-STITCH', width: 260, height: 260 -%}
+      {%- endif -%}
+    </div>
+    <div>
+      <p class="eyebrow text-muted" style="margin-bottom: 16px;">{{ section.settings.eyebrow | default: 'The mark' }}</p>
+      <h3 class="h2-italic" style="margin-bottom: 20px;">{{ section.settings.title | default: 'Drawn for the club, in the editorial register.' }}</h3>
+      <div class="body" style="font-size: 1rem; line-height: 1.7; color: var(--ink-60);">
+        {{ section.settings.body | default: '<p>The mark is rendered in Soft Ink chain-stitch on Bone, three inches wide, drawn for The Springer Club in the editorial register of mid-century book illustration. It is small, on the left chest. It is not a logo.</p>' }}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product mark",
+  "tag": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image_override", "label": "Mark artwork (override)" },
+    { "type": "text", "id": "label_override", "label": "Mark label (override)" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The mark" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Drawn for the club, in the editorial register." },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body",
+      "default": "<p>The mark is rendered in Soft Ink chain-stitch on Bone, three inches wide, drawn for The Springer Club in the editorial register of mid-century book illustration. It is small, on the left chest. It is not a logo.</p>"
+    }
+  ],
+  "presets": [
+    { "name": "Product mark" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,35 @@
+{%- comment -%}
+  Article continue — prev / next navigation. Brief §11.10.
+{%- endcomment -%}
+
+{%- liquid
+  assign prev_article = article.previous_article
+  assign next_article = article.next_article
+-%}
+
+<section style="border-top: 1px solid var(--ink-12); padding: {{ section.settings.padding_top }}px 0; text-align: center;">
+  <div class="container-narrow">
+    <p class="eyebrow text-muted" style="margin-bottom: 24px;">{{ 'blogs.article.continue' | t }}</p>
+    <div style="display: flex; justify-content: center; gap: 64px; flex-wrap: wrap;">
+      {%- if prev_article -%}
+        <a href="{{ prev_article.url }}" class="link-italic">← {{ prev_article.title }}</a>
+      {%- endif -%}
+      {%- if next_article -%}
+        <a href="{{ next_article.url }}" class="link-italic">{{ next_article.title }} →</a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Article continue",
+  "tag": "section",
+  "settings": [
+    { "type": "range", "id": "padding_top",    "label": "Padding top (px)",    "min": 0, "max": 200, "step": 8, "default": 64 }
+  ],
+  "presets": [
+    { "name": "Article continue" }
+  ]
+}
+{% endschema %}

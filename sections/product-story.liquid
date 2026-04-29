@@ -1,0 +1,88 @@
+{%- comment -%}
+  Product story — magazine-spread editorial moment beneath the buy module.
+  Brief §11.5.
+
+  Each SKU's story is read from product metafields:
+    - springer.story_kicker  (text)
+    - springer.story_title   (text)
+    - springer.story_body    (rich text)
+    - springer.story_pull    (text)
+    - springer.story_image   (image)
+  With section-level overrides for theme-editor flexibility.
+{%- endcomment -%}
+
+{%- liquid
+  assign p = product
+  assign m = p.metafields.springer
+  assign kicker = section.settings.kicker_override | default: m.story_kicker | default: 'On the work'
+  assign title  = section.settings.title_override  | default: m.story_title  | default: 'A small editorial.'
+  assign body   = section.settings.body_override   | default: m.story_body
+  assign pull   = section.settings.pull_override   | default: m.story_pull
+  assign img    = section.settings.image_override  | default: m.story_image
+  assign tone   = m.tone | default: 'tone-sage'
+-%}
+
+<section style="background: var(--bone); padding: {{ section.settings.padding_top }}px 0; border-top: 1px solid var(--ink-12);">
+  <div class="container">
+    <div class="text-center" style="margin-bottom: 64px;">
+      <p class="eyebrow text-muted" style="margin-bottom: 18px;">{{ kicker }}</p>
+      <h2 class="h1-page serif-italic">{{ title }}</h2>
+    </div>
+
+    <div class="spread">
+      <div>
+        {%- if img != blank -%}
+          <div class="ph ratio-4-5">
+            {{ img | image_url: width: 1600 | image_tag:
+                loading: 'lazy',
+                sizes: '(min-width: 1025px) 50vw, 100vw',
+                widths: '480, 720, 960, 1200, 1600',
+                alt: title
+            }}
+          </div>
+        {%- else -%}
+          <div class="ph ratio-4-5 {{ tone }}">
+            <span class="ph-caption">{{ section.settings.placeholder_caption | default: "EDITORIAL · the SKU's cultural insight as illustration" }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+      <div>
+        {%- if body != blank -%}
+          <div class="editorial-body" style="font-size: 1.0625rem;">
+            {{ body }}
+          </div>
+        {%- else -%}
+          <p class="editorial-body" style="margin-bottom: 20px;">
+            The story of the SKU lives in this column — set the metafield <code>springer.story_body</code> to populate. This is where the cultural insight gets explained, where the working-spaniel context lives.
+          </p>
+        {%- endif -%}
+
+        {%- if pull != blank -%}
+          <div class="pull-rule">
+            <p class="pull-quote" style="font-size: 1.75rem; line-height: 1.3;">&ldquo;{{ pull }}&rdquo;</p>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product story",
+  "tag": "section",
+  "settings": [
+    { "type": "paragraph", "content": "Reads from product metafields (springer.story_kicker, springer.story_title, springer.story_body, springer.story_pull, springer.story_image, springer.tone). Use the overrides below if you need to set the copy in the theme editor instead." },
+    { "type": "text",     "id": "kicker_override", "label": "Kicker (override)" },
+    { "type": "text",     "id": "title_override",  "label": "Title (override)" },
+    { "type": "richtext", "id": "body_override",   "label": "Body (override)" },
+    { "type": "text",     "id": "pull_override",   "label": "Pull quote (override)" },
+    { "type": "image_picker", "id": "image_override", "label": "Image (override)" },
+    { "type": "text", "id": "placeholder_caption", "label": "Placeholder caption", "default": "EDITORIAL · the SKU's cultural insight as illustration" },
+    { "type": "range", "id": "padding_top", "label": "Padding top (px)", "min": 0, "max": 200, "step": 8, "default": 96 }
+  ],
+  "presets": [
+    { "name": "Product story" }
+  ]
+}
+{% endschema %}

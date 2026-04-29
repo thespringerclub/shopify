@@ -1,0 +1,67 @@
+{%- comment -%}
+  Customer order detail.
+{%- endcomment -%}
+
+<section style="padding: 80px 0;">
+  <div class="container-narrow">
+    <p class="eyebrow text-muted" style="margin-bottom: 12px;">Order</p>
+    <h1 class="h1-page serif-italic" style="margin-bottom: 16px;">Order {{ order.name }}.</h1>
+    <p class="serif-italic" style="font-size: 1.0625rem; color: var(--ink-60); margin-bottom: 48px;">
+      {{ order.created_at | date: '%-d %B %Y' }} · {{ order.financial_status_label }} · {{ order.fulfillment_status_label | default: 'Unfulfilled' }}
+    </p>
+
+    <div style="border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 24px 0; margin-bottom: 48px;">
+      {%- for line in order.line_items -%}
+        <div class="flex-between" style="padding: 12px 0; border-bottom: 1px solid var(--ink-12); align-items: flex-start; gap: 16px;">
+          <div>
+            <p class="serif-italic" style="font-size: 1.0625rem;">{{ line.title }}</p>
+            <p class="micro text-muted" style="margin-top: 4px;">QTY {{ line.quantity }}</p>
+          </div>
+          <span class="small">{{ line.original_line_price | money_without_trailing_zeros }}</span>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-bottom: 48px;" class="order-grid">
+      <div>
+        <h2 class="h3" style="margin-bottom: 16px;">{{ 'customer.order_billing' | t }}</h2>
+        <div class="body" style="font-size: 0.9375rem;">{{ order.billing_address | format_address }}</div>
+      </div>
+      <div>
+        <h2 class="h3" style="margin-bottom: 16px;">{{ 'customer.order_shipping' | t }}</h2>
+        <div class="body" style="font-size: 0.9375rem;">{{ order.shipping_address | format_address }}</div>
+      </div>
+    </div>
+
+    <div style="border-top: 1px solid var(--ink); padding-top: 16px;">
+      <div class="flex-between" style="padding: 6px 0;">
+        <span class="small text-muted">Subtotal</span>
+        <span class="small">{{ order.subtotal_price | money_without_trailing_zeros }}</span>
+      </div>
+      <div class="flex-between" style="padding: 6px 0;">
+        <span class="small text-muted">Shipping</span>
+        <span class="small">{{ order.shipping_price | money_without_trailing_zeros }}</span>
+      </div>
+      {%- if order.tax_price > 0 -%}
+        <div class="flex-between" style="padding: 6px 0;">
+          <span class="small text-muted">Tax</span>
+          <span class="small">{{ order.tax_price | money_without_trailing_zeros }}</span>
+        </div>
+      {%- endif -%}
+      <div class="flex-between" style="padding: 12px 0 0; border-top: 1px solid var(--ink-12); margin-top: 6px;">
+        <span class="serif-italic" style="font-size: 1.125rem;">Total</span>
+        <span class="body" style="font-size: 1.0625rem;">{{ order.total_price | money_without_trailing_zeros }}</span>
+      </div>
+    </div>
+
+    <p style="margin-top: 48px;">
+      <a href="{{ routes.account_url }}" class="link">← Back to account</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 700px) {
+    .order-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+  }
+</style>

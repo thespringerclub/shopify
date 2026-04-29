@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "not-found",
+      "settings": {
+        "placeholder_label": "ILLUSTRATION · A SPRINGER OFF-TRAIL, SNIFFING THE AIR",
+        "eyebrow": "404",
+        "heading": "You appear to be off-trail.",
+        "subtitle": "This page is currently flushed.",
+        "link_label": "Return to the collection."
+      }
+    }
+  },
+  "order": ["main"]
+}

@@ -1,0 +1,92 @@
+{%- comment -%}
+  Cart drawer.
+  Side-out drawer (or bottom-up on mobile). Refreshed via Section Rendering API
+  so it can be re-pulled with /?sections=cart-drawer. The wrapping <section> id
+  ('cart-drawer') matches the section name used in JS.
+
+  Brief §11.6.
+{%- endcomment -%}
+
+<div class="drawer-scrim" data-close-drawer="cart" aria-hidden="true"></div>
+
+<aside id="cart-drawer" class="cart-drawer" data-open="false" aria-hidden="true" aria-label="Shopping bag">
+  <div class="cart-head">
+    <h3 class="h3">{{ 'cart.title' | t }}</h3>
+    <button class="icon-btn" data-close-drawer="cart" aria-label="{{ 'general.accessibility.close' | t }}">
+      {%- render 'icon', icon: 'close', size: 20 -%}
+    </button>
+  </div>
+
+  <div class="cart-items">
+    {%- if cart.item_count > 0 -%}
+      {%- for line in cart.items -%}
+        <div class="cart-row" data-cart-row data-line="{{ forloop.index }}" data-qty="{{ line.quantity }}">
+          {%- if line.image != blank -%}
+            <a href="{{ line.url }}" class="cart-img" style="display: block;">
+              {{ line.image | image_url: width: 200 | image_tag:
+                  loading: 'lazy',
+                  alt: line.product.featured_media.alt | default: line.product.title,
+                  width: 80,
+                  height: 100,
+                  style: 'width:80px; height:100px; object-fit: cover;'
+              }}
+            </a>
+          {%- else -%}
+            <div class="ph tone-deep">
+              <span class="ph-caption" style="font-size: 0.5625rem; margin: 6px; padding: 2px 4px;">{{ line.product.title | upcase | truncate: 12 }}</span>
+            </div>
+          {%- endif -%}
+
+          <div class="meta">
+            <a href="{{ line.url }}" class="serif-italic" style="font-size: 1rem; color: inherit;">{{ line.product.title }}</a>
+            {%- if line.variant.title != 'Default Title' -%}
+              <span class="micro" style="color: var(--ink-60);">{{ line.variant.title | replace: ' / ', ' · ' }}</span>
+            {%- endif -%}
+            <span class="qty">
+              <button data-line-change="-1" data-line="{{ forloop.index }}" aria-label="{{ 'cart.decrease' | t }}">
+                {%- render 'icon', icon: 'minus', size: 12 -%}
+              </button>
+              {{ line.quantity }}
+              <button data-line-change="1" data-line="{{ forloop.index }}" aria-label="{{ 'cart.increase' | t }}">
+                {%- render 'icon', icon: 'plus', size: 12 -%}
+              </button>
+            </span>
+          </div>
+
+          <div class="price">{{ line.final_line_price | money_without_trailing_zeros }}</div>
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      <div class="cart-empty">
+        <p class="serif-italic" style="font-size: 1.125rem; margin-bottom: 20px;">
+          {{- settings.cart_empty_message | default: 'The bag is currently empty. Browse the collection.' -}}
+        </p>
+        <a class="link-italic" href="{{ routes.collections_url }}" data-close-drawer="cart">
+          {{- 'cart.browse_collection' | t -}}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- if cart.item_count > 0 -%}
+    <form action="{{ routes.cart_url }}" method="post" novalidate class="cart-foot">
+      <div class="flex-between" style="align-items: baseline; margin-bottom: 12px;">
+        <span class="serif-italic" style="font-size: 1.25rem;">{{ 'cart.subtotal' | t }}</span>
+        <span class="body" style="font-size: 1.0625rem;">{{ cart.total_price | money_without_trailing_zeros }}</span>
+      </div>
+      <p class="serif-italic" style="font-size: 0.9375rem; color: var(--ink-60); margin: 0 0 18px;">
+        {{- settings.cart_microcopy | default: 'Shipping is calculated at checkout. Returns in good order within thirty days.' -}}
+      </p>
+      <button type="submit" name="checkout" class="btn-primary" style="width: 100%;">
+        {{- 'cart.checkout' | t -}}
+      </button>
+    </form>
+  {%- endif -%}
+</aside>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "tag": "section"
+}
+{% endschema %}

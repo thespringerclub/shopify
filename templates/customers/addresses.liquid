@@ -1,0 +1,61 @@
+{%- comment -%}
+  Saved addresses. Standard Shopify customer pattern, themed to brand.
+{%- endcomment -%}
+
+<section style="padding: 80px 0;">
+  <div class="container-narrow">
+    <p class="eyebrow text-muted" style="margin-bottom: 12px;">Account</p>
+    <h1 class="h1-page serif-italic" style="margin-bottom: 56px;">{{ 'customer.addresses_title' | t }}</h1>
+
+    <div style="margin-bottom: 64px;">
+      <h2 class="h2-italic" style="font-size: 1.5rem; margin-bottom: 24px;">Add a new address.</h2>
+      {%- form 'customer_address', customer.new_address -%}
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div><label class="label">First name</label><input class="input" type="text" name="address[first_name]"></div>
+          <div><label class="label">Last name</label><input class="input" type="text" name="address[last_name]"></div>
+          <div style="grid-column: span 2;"><label class="label">Company (optional)</label><input class="input" type="text" name="address[company]"></div>
+          <div style="grid-column: span 2;"><label class="label">Address 1</label><input class="input" type="text" name="address[address1]"></div>
+          <div style="grid-column: span 2;"><label class="label">Address 2</label><input class="input" type="text" name="address[address2]"></div>
+          <div><label class="label">City</label><input class="input" type="text" name="address[city]"></div>
+          <div><label class="label">Postal code</label><input class="input" type="text" name="address[zip]"></div>
+          <div><label class="label">Country</label>
+            <select class="input" name="address[country]" id="address_country_new" data-default="{{ form.country }}">{{ all_country_option_tags }}</select>
+          </div>
+          <div><label class="label">Province</label>
+            <select class="input" name="address[province]" id="address_province_new" data-default="{{ form.province }}"></select>
+          </div>
+          <div style="grid-column: span 2;"><label class="label">Phone</label><input class="input" type="tel" name="address[phone]"></div>
+        </div>
+        <label style="display: flex; gap: 8px; margin-top: 16px; font-family: var(--sans); font-size: 0.875rem;">
+          <input type="checkbox" name="address[default]" value="1"> Set as default
+        </label>
+        <button type="submit" class="btn-primary" style="margin-top: 24px;">Save address.</button>
+      {%- endform -%}
+    </div>
+
+    <h2 class="h2-italic" style="font-size: 1.5rem; margin-bottom: 24px;">On the rolls.</h2>
+    {%- paginate customer.addresses by 10 -%}
+      {%- for address in customer.addresses -%}
+        <div style="padding: 24px 0; border-top: 1px solid var(--ink-12);">
+          {%- if address == customer.default_address -%}
+            <p class="micro text-muted" style="margin-bottom: 8px;">DEFAULT</p>
+          {%- endif -%}
+          <div class="body">{{ address | format_address }}</div>
+          <div style="margin-top: 12px; display: flex; gap: 24px;">
+            <a href="#" class="link" data-edit-id="{{ address.id }}">{{ 'customer.edit' | t }}</a>
+            {%- form 'customer_address', address, style: 'display: inline;' -%}
+              <input type="hidden" name="_method" value="delete">
+              <button type="submit" class="link" style="background: none; border: none; cursor: pointer;">{{ 'customer.delete' | t }}</button>
+            {%- endform -%}
+          </div>
+        </div>
+      {%- endfor -%}
+      <div style="border-bottom: 1px solid var(--ink-12);"></div>
+      {%- render 'pagination', paginate: paginate -%}
+    {%- endpaginate -%}
+
+    <p style="margin-top: 48px;">
+      <a href="{{ routes.account_url }}" class="link">← Back to account</a>
+    </p>
+  </div>
+</section>

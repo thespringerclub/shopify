@@ -1,0 +1,50 @@
+{%- comment -%}
+  Theme block — Eyebrow.
+  Small all-caps Cormorant overline. Brief §6, §11.
+{%- endcomment -%}
+
+<p
+  class="eyebrow"
+  style="
+    color: {{ block.settings.color | default: 'var(--ink-60)' }};
+    margin-bottom: {{ block.settings.margin_bottom }}px;
+    {% if block.settings.align != 'left' %}text-align: {{ block.settings.align }};{% endif %}
+  "
+  {{ block.shopify_attributes }}
+>{{ block.settings.text }}</p>
+
+{% schema %}
+{
+  "name": "Eyebrow",
+  "settings": [
+    { "type": "text", "id": "text", "label": "Text", "default": "Members in Good Standing" },
+    {
+      "type": "select",
+      "id": "color",
+      "label": "Color",
+      "default": "muted",
+      "options": [
+        { "value": "var(--ink)",    "label": "Ink" },
+        { "value": "var(--ink-60)", "label": "Muted ink (60%)" },
+        { "value": "var(--bone)",   "label": "Bone (on dark grounds)" },
+        { "value": "var(--clay)",   "label": "Clay" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Alignment",
+      "default": "left",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    { "type": "range", "id": "margin_bottom", "label": "Margin below (px)", "min": 0, "max": 64, "step": 2, "default": 18 }
+  ],
+  "presets": [
+    { "name": "Eyebrow" }
+  ]
+}
+{% endschema %}

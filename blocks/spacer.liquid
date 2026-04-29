@@ -1,0 +1,17 @@
+{%- comment -%}
+  Theme block — Spacer. Negative space is part of the design (brief §11.3).
+{%- endcomment -%}
+
+<div style="height: {{ block.settings.height }}px;" {{ block.shopify_attributes }}></div>
+
+{% schema %}
+{
+  "name": "Spacer",
+  "settings": [
+    { "type": "range", "id": "height", "label": "Height (px)", "min": 8, "max": 240, "step": 4, "default": 48 }
+  ],
+  "presets": [
+    { "name": "Spacer" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,96 @@
+{%- comment -%}
+  Brand lockup snippet.
+  Renders the wordmark + logomark pair in three variants:
+    - horizontal (default for header/footer)
+    - stacked   (for hero areas)
+    - logomark  (alone)
+    - wordmark  (alone)
+  Falls back to a labeled placeholder for the logomark if not uploaded.
+  Brief §8.
+
+  Inputs:
+    variant: 'horizontal' | 'stacked' | 'logomark' | 'wordmark'   (default: horizontal)
+    color:   'ink' | 'bone'                                        (default: ink)
+    scale:   number                                                (default: 1)
+{%- endcomment -%}
+
+{%- liquid
+  assign variant = variant | default: 'horizontal'
+  assign color = color | default: 'ink'
+  assign scale = scale | default: 1
+  assign use_clay = use_clay | default: false
+
+  if color == 'bone'
+    assign css_color = 'var(--bone)'
+  elsif use_clay
+    assign css_color = 'var(--clay)'
+  else
+    assign css_color = 'var(--ink)'
+  endif
+
+  if use_clay and settings.logomark_clay != blank
+    assign logomark_image = settings.logomark_clay
+  else
+    assign logomark_image = settings.logomark
+  endif
+
+  assign mark_size = 40 | times: scale
+  assign word_size = 1.75 | times: scale
+  assign stacked_word_size = 3.25 | times: scale
+  assign stacked_mark_size = 96 | times: scale
+-%}
+
+{%- case variant -%}
+  {%- when 'stacked' -%}
+    <div style="display: flex; flex-direction: column; align-items: center; gap: {{ 14 | times: scale }}px; color: {{ css_color }};">
+      {% if logomark_image != blank %}
+        <img src="{{ logomark_image | image_url: width: 600 }}"
+             alt="{{ shop.name }} logomark"
+             width="{{ stacked_mark_size }}" height="{{ stacked_mark_size }}"
+             style="width: {{ stacked_mark_size }}px; height: auto; display: block;">
+      {% else %}
+        <span class="mark-box {% if color == 'bone' %}bone{% endif %}"
+              style="border-color: {{ css_color }}; color: {{ css_color }}; padding: {{ 20 | times: scale }}px {{ 28 | times: scale }}px; font-size: {{ 0.6875 | times: scale }}rem;">
+          [ LOGOMARK · SPRINGER FLUSHING ]
+        </span>
+      {% endif %}
+      <span class="script" style="font-size: {{ stacked_word_size }}rem; line-height: 1; color: {{ css_color }}; white-space: nowrap;">
+        {{ shop.name | default: 'The Springer Club' }}
+      </span>
+    </div>
+
+  {%- when 'logomark' -%}
+    {% if logomark_image != blank %}
+      <img src="{{ logomark_image | image_url: width: 200 }}"
+           alt="{{ shop.name }} logomark"
+           width="{{ mark_size }}" height="{{ mark_size }}"
+           style="width: {{ mark_size }}px; height: auto; display: block;">
+    {% else %}
+      <span class="mark-box {% if color == 'bone' %}bone{% endif %}"
+            style="border-color: {{ css_color }}; color: {{ css_color }}; width: {{ mark_size }}px; height: {{ mark_size }}px; padding: 0; font-size: {{ 0.5 | times: scale }}rem;">
+        TSC
+      </span>
+    {% endif %}
+
+  {%- when 'wordmark' -%}
+    <span class="script" style="font-size: {{ word_size }}rem; line-height: 1; color: {{ css_color }}; white-space: nowrap;">
+      {{ shop.name | default: 'The Springer Club' }}
+    </span>
+
+  {%- else -%}
+    <span style="display: inline-flex; align-items: center; gap: {{ 14 | times: scale }}px; color: {{ css_color }};" class="header-brand">
+      {% if logomark_image != blank %}
+        <img src="{{ logomark_image | image_url: width: 200 }}"
+             alt="{{ shop.name }} logomark"
+             width="{{ mark_size }}" height="{{ mark_size }}"
+             style="width: {{ mark_size }}px; height: {{ mark_size }}px; display: block;">
+      {% else %}
+        <span class="brand-mark {% if color == 'bone' %}bone{% endif %}" style="border-color: {{ css_color }}; color: {{ css_color }}; width: {{ mark_size }}px; height: {{ mark_size }}px; font-size: {{ 0.5 | times: scale }}rem;">
+          TSC
+        </span>
+      {% endif %}
+      <span class="brand-word script" style="font-size: {{ word_size }}rem; color: {{ css_color }};">
+        {{ shop.name | default: 'The Springer Club' }}
+      </span>
+    </span>
+{%- endcase -%}

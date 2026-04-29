@@ -1,0 +1,70 @@
+{%- comment -%}
+  Editorial paragraph — centered Cormorant italic intro paragraph.
+  Used on the homepage beneath the hero, the journal index, the About page, etc.
+  Brief §11.3 (collection introduction).
+
+  Composes from theme blocks (eyebrow, heading, body, hairline, button).
+{%- endcomment -%}
+
+{%- liquid
+  case section.settings.ground
+    when 'sage'
+      assign ground_var = 'var(--sage)'
+    when 'seaglass'
+      assign ground_var = 'var(--seaglass)'
+    when 'ink'
+      assign ground_var = 'var(--ink)'
+    else
+      assign ground_var = 'var(--bone)'
+  endcase
+-%}
+
+<section
+  class="editorial-paragraph"
+  style="
+    background: {{ ground_var }};
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+    {% if section.settings.ground == 'ink' %}color: var(--bone);{% endif %}
+  "
+>
+  <div class="container-narrow text-center">
+    {% content_for 'blocks' %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Editorial paragraph",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "ground",
+      "label": "Ground",
+      "default": "bone",
+      "options": [
+        { "value": "bone",     "label": "Bone" },
+        { "value": "sage",     "label": "Sage" },
+        { "value": "seaglass", "label": "Sea Glass" },
+        { "value": "ink",      "label": "Soft Ink (dark)" }
+      ]
+    },
+    { "type": "range", "id": "padding_top",    "label": "Padding top (px)",    "min": 0, "max": 200, "step": 8, "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (px)", "min": 0, "max": 200, "step": 8, "default": 96 }
+  ],
+  "blocks": [
+    { "type": "@theme" },
+    { "type": "@app" }
+  ],
+  "presets": [
+    {
+      "name": "Editorial paragraph",
+      "blocks": [
+        { "type": "eyebrow", "settings": { "text": "The current collection", "align": "center", "margin_bottom": 28 } },
+        { "type": "body",    "settings": { "text": "<p>Made for the porch, the field, and the long way home — drawn in the editorial register of mid-century book illustration, embroidered as the brand has always embroidered.</p>", "style": "editorial-italic", "font_size_em": 1.625, "align": "center", "max_width": 50, "margin_bottom": 0 } },
+        { "type": "hairline", "settings": { "color": "ink", "center": true, "width": 60, "margin_top": 40, "margin_bottom": 0 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

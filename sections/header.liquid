@@ -1,0 +1,63 @@
+{%- comment -%}
+  Header. Brief §8 / §11.1.
+  Centered horizontal lockup left, primary nav center, utility icons right.
+  Transparent on the homepage hero (when enabled in theme settings).
+{%- endcomment -%}
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="header-brand" href="{{ routes.root_url }}" aria-label="{{ shop.name }}">
+      {%- render 'brand-lockup', variant: 'horizontal', color: 'ink' -%}
+    </a>
+
+    <nav class="header-nav" aria-label="Primary">
+      {%- for link in section.settings.menu.links -%}
+        <a class="nav-link {% if link.current or link.child_current %}active{% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+      {%- endfor -%}
+    </nav>
+
+    <div class="header-utility">
+      <button class="icon-btn" data-open-drawer="search" aria-label="{{ 'general.accessibility.search' | t }}">
+        {%- render 'icon', icon: 'search', size: 20 -%}
+      </button>
+      <a class="icon-btn" href="{{ routes.account_url }}" aria-label="{{ 'general.accessibility.account' | t }}">
+        {%- render 'icon', icon: 'account', size: 20 -%}
+      </a>
+      <button class="icon-btn" data-open-drawer="cart" aria-label="{{ 'general.accessibility.bag' | t }}" style="width: auto; gap: 4px;">
+        {%- render 'icon', icon: 'bag', size: 20 -%}
+        <span class="bag-count" {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+      </button>
+      <button class="icon-btn menu-toggle" aria-label="{{ 'general.accessibility.menu' | t }}">
+        {%- render 'icon', icon: 'menu', size: 20 -%}
+      </button>
+    </div>
+  </div>
+</header>
+
+{%- comment -%} Mobile menu drawer (toggled via .menu-toggle in header) {%- endcomment -%}
+<div class="mobile-menu" data-open="false" role="dialog" aria-modal="true" aria-label="{{ 'sections.header.menu' | t }}">
+  <button class="icon-btn close" data-close-drawer="menu" aria-label="{{ 'general.accessibility.close' | t }}">
+    {%- render 'icon', icon: 'close', size: 24 -%}
+  </button>
+  <nav style="margin-top: 32px;">
+    {%- for link in section.settings.menu.links -%}
+      <a class="nav-link" href="{{ link.url }}">{{ link.title }}</a>
+    {%- endfor -%}
+    <a class="nav-link" href="{{ routes.account_url }}">{{ 'general.accessibility.account' | t }}</a>
+  </nav>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu",
+      "info": "Brief §11.1: four primary items, no more — Apparel · Accessories · Journal · About."
+    }
+  ]
+}
+{% endschema %}

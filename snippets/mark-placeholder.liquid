@@ -1,0 +1,44 @@
+{%- comment -%}
+  Mark placeholder — small inline labeled box used as a stand-in for the
+  Audubon-style logomark or product mark when artwork is not yet uploaded.
+
+  Inputs:
+    label: string                      (required)
+    color: 'ink' | 'bone' | 'clay'     (default: ink)
+    width: number (px)                 (default: 200)
+    height: number (px)                (default: 200)
+{%- endcomment -%}
+
+{%- liquid
+  assign label = label | default: 'MARK'
+  assign color = color | default: 'ink'
+  assign width = width | default: 200
+  assign height = height | default: 200
+
+  case color
+    when 'clay'
+      assign css_color = 'var(--clay)'
+    when 'bone'
+      assign css_color = 'var(--bone)'
+    else
+      assign css_color = 'var(--ink)'
+  endcase
+-%}
+
+<span style="
+  width: {{ width }}px;
+  height: {{ height }}px;
+  border: 1px solid {{ css_color }};
+  color: {{ css_color }};
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 20px;
+">
+  {{ label }}
+</span>

@@ -1,0 +1,117 @@
+{%- comment -%}
+  Footer. Brief §11.2.
+  Three columns desktop, stacked on mobile.
+  Column 1: lockup, tagline, eyebrow.
+  Column 2: nav links.
+  Column 3: email capture.
+  Below: hairline, copyright + legal links + locale.
+{%- endcomment -%}
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-cols">
+
+      {%- comment -%} Column 1 — lockup + tagline {%- endcomment -%}
+      <div class="footer-col">
+        {%- render 'brand-lockup', variant: 'horizontal', color: 'ink' -%}
+        <p class="serif-italic" style="font-size: 1.0625rem; margin-top: 24px; margin-bottom: 18px;">
+          {{- section.settings.tagline | default: settings.footer_tagline -}}
+        </p>
+        <div class="hairline-soft" style="width: 60px; margin-bottom: 18px;"></div>
+        <p class="eyebrow text-muted">
+          {{- section.settings.eyebrow | default: settings.footer_eyebrow -}}
+        </p>
+      </div>
+
+      {%- comment -%} Column 2 — nav {%- endcomment -%}
+      <div class="footer-col">
+        <h4>{{ section.settings.nav_heading | default: 'The club.' }}</h4>
+        <nav class="footer-nav" aria-label="Footer">
+          {%- for link in section.settings.menu.links -%}
+            <a href="{{ link.url }}">{{ link.title }}</a>
+          {%- endfor -%}
+        </nav>
+      </div>
+
+      {%- comment -%} Column 3 — email capture {%- endcomment -%}
+      <div class="footer-col">
+        <h4>{{ section.settings.email_heading | default: settings.footer_email_heading }}</h4>
+        <p class="small text-muted" style="margin-top: 0; margin-bottom: 18px;">
+          {{- section.settings.email_caption | default: settings.footer_email_caption -}}
+        </p>
+        {%- form 'customer', class: 'footer-form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <input
+              class="input"
+              type="email"
+              name="contact[email]"
+              placeholder="{{ 'general.newsletter.placeholder' | t }}"
+              aria-label="{{ 'general.newsletter.placeholder' | t }}"
+              required
+              style="flex: 1; min-width: 0;"
+            >
+            <button class="btn-primary" type="submit">{{ 'general.newsletter.submit' | t }}</button>
+          </div>
+          {%- if form.posted_successfully? -%}
+            <p class="serif-italic" style="margin-top: 12px; color: var(--ink-60);">{{ 'general.newsletter.success' | t }}</p>
+          {%- elsif form.errors -%}
+            <p class="field-error" style="margin-top: 12px;">{{ form.errors | default_errors }}</p>
+          {%- endif -%}
+        {%- endform -%}
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© {{ 'now' | date: '%Y' }} {{ shop.name }}</span>
+      <div class="links">
+        {%- if section.settings.terms_page != blank -%}
+          <a href="{{ section.settings.terms_page.url }}">{{ section.settings.terms_page.title }}</a>
+        {%- endif -%}
+        {%- if section.settings.privacy_page != blank -%}
+          <a href="{{ section.settings.privacy_page.url }}">{{ section.settings.privacy_page.title }}</a>
+        {%- endif -%}
+        {%- if section.settings.accessibility_page != blank -%}
+          <a href="{{ section.settings.accessibility_page.url }}">{{ section.settings.accessibility_page.title }}</a>
+        {%- endif -%}
+        {%- if localization.available_countries.size > 1 -%}
+          {%- form 'localization', class: 'inline-form', style: 'display: inline-block;' -%}
+            <select name="country_code" onchange="this.form.submit()" style="background: transparent; border: none; color: inherit; font: inherit; cursor: pointer;">
+              {%- for country in localization.available_countries -%}
+                <option value="{{ country.iso_code }}" {% if country.iso_code == localization.country.iso_code %}selected{% endif %}>
+                  {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
+                </option>
+              {%- endfor -%}
+            </select>
+          {%- endform -%}
+        {%- else -%}
+          <span>{{ shop.address.country }} ({{ cart.currency.iso_code }} {{ cart.currency.symbol }})</span>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "header", "content": "Column 1 — brand" },
+    { "type": "text", "id": "tagline", "label": "Tagline (Cormorant italic)", "default": "Found wherever the birds are." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow line", "default": "Members in Good Standing — Est. 2026" },
+
+    { "type": "header", "content": "Column 2 — navigation" },
+    { "type": "text", "id": "nav_heading", "label": "Heading", "default": "The club." },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer", "info": "Brief §11.2: Shop / About / Journal / Members." },
+
+    { "type": "header", "content": "Column 3 — email capture" },
+    { "type": "text", "id": "email_heading", "label": "Heading", "default": "Join the rolls." },
+    { "type": "text", "id": "email_caption", "label": "Caption", "default": "Quiet correspondence, infrequent." },
+
+    { "type": "header", "content": "Bottom rail — legal" },
+    { "type": "page", "id": "terms_page",         "label": "Terms page" },
+    { "type": "page", "id": "privacy_page",       "label": "Privacy page" },
+    { "type": "page", "id": "accessibility_page", "label": "Accessibility page" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,30 @@
+{%- comment -%}
+  Page content — fallback wrapper that renders {{ page.content }} from
+  Shopify's page editor. Used by the default page.json template.
+{%- endcomment -%}
+
+<section style="padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;">
+  <div class="container-narrow">
+    {%- if section.settings.show_title -%}
+      <h1 class="h1-page serif-italic" style="margin-bottom: 48px; text-align: center;">{{ page.title }}</h1>
+    {%- endif -%}
+    <div class="editorial-body rte">
+      {{ page.content }}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Page content",
+  "tag": "section",
+  "settings": [
+    { "type": "checkbox", "id": "show_title", "label": "Show page title", "default": true },
+    { "type": "range", "id": "padding_top",    "label": "Padding top (px)",    "min": 0, "max": 200, "step": 8, "default": 96 },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom (px)", "min": 0, "max": 200, "step": 8, "default": 96 }
+  ],
+  "presets": [
+    { "name": "Page content" }
+  ]
+}
+{% endschema %}
