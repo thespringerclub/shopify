@@ -20,7 +20,11 @@
     <p class="eyebrow" style="margin-bottom: 28px;">{{ section.settings.eyebrow | default: 'Members in Good Standing' }}</p>
     <h2 class="h1-page serif-italic" style="margin-bottom: 28px;">{{ section.settings.heading | default: 'The rolls are open.' }}</h2>
     <div class="editorial-body" style="margin-bottom: 36px; max-width: 52ch; margin-left: auto; margin-right: auto;">
-      {{ section.settings.body | default: '<p>Quiet correspondence, infrequent. Notice when a new collection is in good order, an entry is posted to the journal, or a member\'s gathering is on the calendar.</p>' }}
+      {%- if section.settings.body != blank -%}
+        {{ section.settings.body }}
+      {%- else -%}
+        <p>Quiet correspondence, infrequent. Notice when a new collection is in good order, an entry is posted to the journal, or a members&rsquo; gathering is on the calendar.</p>
+      {%- endif -%}
     </div>
     {%- form 'customer', class: 'members-cta-form' -%}
       <input type="hidden" name="contact[tags]" value="newsletter, members">

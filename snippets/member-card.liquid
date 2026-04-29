@@ -11,7 +11,10 @@
   endif
   assign member_no = customer.id | default: 0 | modulo: 10000
   assign member_no_str = member_no | prepend: '0000' | slice: -4, 4
-  assign since_year = customer.created_at | date: '%Y' | default: 'shop.now | date: \'%Y\''
+  assign since_year = customer.created_at | date: '%Y'
+  if since_year == blank
+    assign since_year = 'now' | date: '%Y'
+  endif
   if since_year == blank
     assign since_year = '2026'
   endif

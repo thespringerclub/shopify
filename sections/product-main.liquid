@@ -48,10 +48,17 @@
         {%- if product.media.size > 0 -%}
           {%- for media in product.media -%}
             <div class="ph ratio-4-5 tone-bone" style="background: #fff; border: 1px solid var(--ink-12);">
+              {%- liquid
+                if forloop.first
+                  assign media_loading = 'eager'
+                else
+                  assign media_loading = 'lazy'
+                endif
+              -%}
               {%- case media.media_type -%}
                 {%- when 'image' -%}
                   {{ media | image_url: width: 1600 | image_tag:
-                      loading: forloop.first ? 'eager' : 'lazy',
+                      loading: media_loading,
                       sizes: '(min-width: 1025px) 60vw, 100vw',
                       widths: '480, 720, 960, 1200, 1600, 2000',
                       alt: media.alt | default: product.title
@@ -277,7 +284,7 @@
     { "type": "checkbox", "id": "show_shipping",    "label": "Show shipping accordion",     "default": true },
     { "type": "text",     "id": "fulfillment_microcopy", "label": "Fulfillment microcopy", "default": "Currently in good order. Ships within five working days." },
     { "type": "richtext", "id": "shipping_copy", "label": "Shipping & returns copy", "default": "<p>Currently in good order. Domestic orders ship within five working days, by ground or expedited at checkout. Returns in good order within thirty days, full credit, no fuss.</p>" },
-    { "type": "range",    "id": "extra_placeholder_images", "label": "Number of placeholder images (no real product media)", "min": 0, "max": 8, "step": 1, "default": 6 }
+    { "type": "range",    "id": "extra_placeholder_images", "label": "Number of placeholder images", "min": 0, "max": 8, "step": 1, "default": 6 }
   ],
   "presets": [
     { "name": "Product main" }
