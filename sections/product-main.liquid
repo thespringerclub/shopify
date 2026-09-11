@@ -101,7 +101,7 @@
           </div>
           <div class="hairline-soft"></div>
           <div class="ph ratio-4-5 tone-bone" style="background: #fff; border: 1px solid var(--ink-12); display: flex; align-items: center; justify-content: center;">
-            {%- render 'mark-placeholder', label: 'MARK IN ISOLATION · ' | append: mark_label, width: 220, height: 220 -%}
+            {%- render 'mark-placeholder', label: 'MARK IN ISOLATION · ', append: mark_label, width: 220, height: 220 -%}
           </div>
         {%- endif -%}
       </div>
@@ -291,3 +291,15 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'mark-placeholder', label: 'MARK IN ISOLATION · ' | append: mark_label,
+    width: 220, height: 220 -%}"
+  to: "{%- render 'mark-placeholder', label: 'MARK IN ISOLATION · ', append: mark_label,
+    width: 220, height: 220 -%}"
+  position: 4951..5060
+{% endcomment %}

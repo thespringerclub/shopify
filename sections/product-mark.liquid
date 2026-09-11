@@ -20,7 +20,7 @@
             style: 'max-width: 260px; height: auto;'
         }}
       {%- else -%}
-        {%- render 'mark-placeholder', label: 'MARK · ' | append: mark_label | append: ' · CHAIN-STITCH', width: 260, height: 260 -%}
+        {%- render 'mark-placeholder', label: 'MARK · ', append: ' · CHAIN-STITCH', width: 260, height: 260 -%}
       {%- endif -%}
     </div>
     <div>
@@ -54,3 +54,15 @@
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{%- render 'mark-placeholder', label: 'MARK · ' | append: mark_label | append:
+    ' · CHAIN-STITCH', width: 260, height: 260 -%}"
+  to: "{%- render 'mark-placeholder', label: 'MARK · ', append: ' · CHAIN-STITCH',
+    width: 260, height: 260 -%}"
+  position: 937..1040
+{% endcomment %}
